@@ -12,15 +12,17 @@ filetype indent on
 set autoread
 
 " Set leader key
-let mapleader = ","
-let g:mapleader = ","
+let mapleader = "\<Space>"
+let g:mapleader = "\<Space>"
 
 """"""""""""""""""""""""""
 " => Leader hotkeys
 """""""""""""""""""""""""
 " Saving and quiting
 nmap <leader>w :w<cr>
-nmap <leader>q :wq<cr>
+nmap <leader>q :bdelete<cr>
+nmap <leader>x :qa<cr>
+
 map <silent> <leader><cr> :noh<cr>
 " Make hotkeys
 noremap <Leader>m :!clear && make<CR>
@@ -29,6 +31,16 @@ noremap <Leader>r :!clear && make run<CR>
 noremap <C-c> :!git commit -m ""
 noremap <C-a> :!git add
 noremap <C-s> :!git push<CR>
+" Copy and paste to/from system clipboard
+vmap <leader>y "+y
+vmap <leader>d "+d
+nmap <leader>p "+p
+" Move between buffers
+nmap <leader>b :bnext<cr>
+nmap <leader>v :bprevious<cr>
+" Delete trailing whitespace
+nmap <leader>ws :call DeleteTrailingWS()<cr>
+
 
 """""""""""""""""""""""""""""
 " => User interface
@@ -75,29 +87,28 @@ set tm=500
 " Line numbers
 set number
 
+" set 0 to jump to last non whitespace character
+map 0 ^
+
+" Show statusline
+set laststatus=2
+
+" Turn backup off, learn to use git
+set nobackup
+set nowb
+set noswapfile
+
 """"""""""""""""""""""""""
 " => Colors and Fonts
 """"""""""""""""""""""""""
 " Syntax highlighting
 syntax enable
 
-" Set colorscheme
-"colorscheme wombat256i
-colorscheme seoul256
-
 " Set utf8 encoding
 set encoding=utf8
 
 " Use unix as standard filetype
 set ffs=unix,dos,mac
-
-"""""""""""""""""""""""""""
-" => Files and backup
-"""""""""""""""""""""""""""
-" Turn backup off, learn to use git
-set nobackup
-set nowb
-set noswapfile
 
 """""""""""""""""""""""""""
 " => Text, tabs and indent
@@ -128,41 +139,15 @@ autocmd BufReadPost *
 " Remember info about open buffers on close
 set viminfo^=%
 
-""""""""""""""""""""""""""""""
-" => Status line
-""""""""""""""""""""""""""""""
-" Show statusline
-set laststatus=2
-" Format status
-"set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
-
-" Statusline modifications, added Fugitive Status Line & Syntastic Error Message {{{2
-
-""""""""""""""""""""""""""""""
-" => Edit standard mappings
-""""""""""""""""""""""""""""""
-" Remap 0 to first non-blank character
-map 0 ^
-
-" Delete trailing white space on save
+"""""""""""""""""""""""""""""
+" => Helper Functions
+""""""""""""""""""""""""""""
+" Returns true if paste mode is enabled
 func! DeleteTrailingWS()
     exe "normal mz"
     %s/\s\+$//ge
     exe "normal `z"
 endfunc
-autocmd BufWrite *.* :call DeleteTrailingWS()
-
-
-"""""""""""""""""""""""""""""
-" => Helper Functions
-""""""""""""""""""""""""""""
-" Returns true if paste mode is enabled
-function! HasPaste()
-    if &paste
-        return 'PASTE MODE  '
-    en
-    return ''
-endfunction
 
 """"""""""""""""""""""""""""
 " => Templates
@@ -177,5 +162,3 @@ function! NewJavaFile()
 endfunction
 
 autocmd BufNewFile *.java call NewJavaFile()
-
-
