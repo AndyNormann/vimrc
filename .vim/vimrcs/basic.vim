@@ -12,8 +12,8 @@ filetype indent on
 set autoread
 
 " Set leader key
-let mapleader = "\<Space>"
-let g:mapleader = "\<Space>"
+let mapleader = ","
+let g:mapleader = ","
 
 """"""""""""""""""""""""""
 " => Leader hotkeys
@@ -22,6 +22,7 @@ let g:mapleader = "\<Space>"
 nmap <leader>w :w<cr>
 nmap <leader>q :bdelete<cr>
 nmap <leader>x :qa<cr>
+nmap <leader>e :e 
 
 map <silent> <leader><cr> :noh<cr>
 " Make hotkeys
@@ -29,17 +30,17 @@ noremap <Leader>m :!clear && make<CR>
 noremap <Leader>r :!clear && make run<CR>
 " Git hotkeys
 noremap <C-c> :!git commit -m ""
-noremap <C-a> :!git add
+"noremap <C-a> :!git add
 noremap <C-s> :!git push<CR>
 " Copy and paste to/from system clipboard
 vmap <leader>y "+y
 vmap <leader>d "+d
 nmap <leader>p "+p
 " Move between buffers
-nmap <leader>b :bnext<cr>
-nmap <leader>v :bprevious<cr>
+nmap <C-l> :bnext!<cr>
+nmap <C-h> :bprevious!<cr>
 " Delete trailing whitespace
-nmap <leader>ws :call DeleteTrailingWS()<cr>
+nmap <leader>` :call DeleteTrailingWS()<cr>
 
 
 """""""""""""""""""""""""""""
@@ -53,6 +54,7 @@ set wildignore=*.o,*~,*.class
 
 " Height of the command bar
 set cmdheight=1
+set cmdwinheight=1
 
 " Configure backspace so it acts like backspace
 set backspace=eol,start,indent
@@ -98,6 +100,10 @@ set nobackup
 set nowb
 set noswapfile
 
+" Turn off mode output on the bottom
+set nosmd
+set noru
+
 """"""""""""""""""""""""""
 " => Colors and Fonts
 """"""""""""""""""""""""""
@@ -142,7 +148,7 @@ set viminfo^=%
 """""""""""""""""""""""""""""
 " => Helper Functions
 """"""""""""""""""""""""""""
-" Returns true if paste mode is enabled
+" Deletes trailing whitespace
 func! DeleteTrailingWS()
     exe "normal mz"
     %s/\s\+$//ge
@@ -162,3 +168,25 @@ function! NewJavaFile()
 endfunction
 
 autocmd BufNewFile *.java call NewJavaFile()
+
+""""""""""""""""""""""""""
+" Persistent undo
+" so you can undo even after closing a buffer/VIM
+""""""""""""""""""""""""""
+try
+    set undodir=~/.vim_runtime/temp_dirs/undodir
+    set undofile
+catch
+endtry
+
+""""""""""""""""""""""""""
+" => Parenthesis/bracket
+""""""""""""""""""""""""""
+" Map auto complete of (, ", ', [
+inoremap $1 ()<esc>i
+inoremap $2 []<esc>i
+inoremap $3 {}<esc>i
+inoremap $4 {<esc>o}<esc>O
+inoremap $q ''<esc>i
+inoremap $e ""<esc>i
+inoremap $t <><esc>i
