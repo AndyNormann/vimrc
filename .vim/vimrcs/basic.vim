@@ -28,17 +28,9 @@ map <silent> <leader><cr> :noh<cr>
 " Make hotkeys
 noremap <Leader>m :!clear && make<CR>
 noremap <Leader>r :!clear && make run<CR>
-" Git hotkeys
-noremap <C-c> :!git commit -m ""
-"noremap <C-a> :!git add
-noremap <C-s> :!git push<CR>
-" Copy and paste to/from system clipboard
-vmap <leader>y "+y
-vmap <leader>d "+d
-nmap <leader>p "+p
-" Move between buffers
-nmap <C-l> :bnext!<cr>
-nmap <C-h> :bprevious!<cr>
+" Move between buffers(Replaced by unite)
+"nmap <C-l> :bnext!<cr>
+"nmap <C-h> :bprevious!<cr>
 " Delete trailing whitespace
 nmap <leader>` :call DeleteTrailingWS()<cr>
 
@@ -46,6 +38,9 @@ nmap <leader>` :call DeleteTrailingWS()<cr>
 """""""""""""""""""""""""""""
 " => User interface
 """""""""""""""""""""""""""""
+"  Set mouse mode
+set mouse=a
+
 " Turn on wild menu
 set wildmenu
 
@@ -87,13 +82,18 @@ set t_vb=
 set tm=500
 
 " Line numbers
-set number
+"set number
 
 " set 0 to jump to last non whitespace character
 map 0 ^
 
 " Show statusline
 set laststatus=2
+
+" Hightlight current line
+set cursorline
+hi CursorLine term=none cterm=none ctermbg=Magenta 
+" DarkRed could work
 
 " Turn backup off, learn to use git
 set nobackup
@@ -145,6 +145,9 @@ autocmd BufReadPost *
 " Remember info about open buffers on close
 set viminfo^=%
 
+" Makes all copy and paste go to system clipboard
+set clipboard=unnamed
+
 """""""""""""""""""""""""""""
 " => Helper Functions
 """"""""""""""""""""""""""""
@@ -190,3 +193,9 @@ inoremap $4 {<esc>o}<esc>O
 inoremap $q ''<esc>i
 inoremap $e ""<esc>i
 inoremap $t <><esc>i
+
+""""""""""""""""""""""""
+" => Movement
+"""""""""""""""""""""""
+nmap <C-j> <C-d>zz
+nmap <C-k> <C-u>zz

@@ -19,6 +19,7 @@ au FileType c inoremap <Leader>. ->
 au FileType cpp nnoremap <Leader>t :!clear && ./%< 
 au FileType cpp nnoremap <Leader>c :!clear && g++ -std=c++11 -Wall -Wextra -o %< %<CR>
 au FileType cpp inoremap <Leader>. ->
+au FileType cpp inoremap ., ::
 
 """"""""""""""""""""""""""""""
 " => Java section

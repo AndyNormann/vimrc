@@ -1,9 +1,5 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/Users/andy/.vim/bundle/vim-airlineish'
-let g:netrw_dirhist_2='/Users/andy/.vim/bundle/vim-airlineish/autoload'
-let g:netrw_dirhist_3='/Users/andy/.vim/bundle/vim-airlineish/autoload/airline'
-let g:netrw_dirhist_4='/Users/andy/.vim/bundle/vim-airlineish/autoload/airline/themes'
-let g:netrw_dirhist_5='/Users/andy/.Git/School/INF2440/Oblig4'
-let g:netrw_dirhist_6='/Users/andy/.oh-my-zsh'
-let g:netrw_dirhist_7='/Users/andy/.oh-my-fish'
+let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_1='/Users/andrew/.vim/vimrcs'
+let g:netrw_dirhist_2='/Users/andrew/.vim'
+let g:netrw_dirhist_3='/Users/andrew/.vim/templates'

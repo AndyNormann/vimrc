@@ -1,0 +1,32 @@
+
+Bundle 'bling/vim-airline'
+
+
+" Airline config
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'murmur'
+let g:airline_extensions = ['bufferline']
+let g:airline#extensions#default#layout = [
+            \ [ 'a', 'b', 'c' ],
+            \ [ 'warning' ]
+            \ ]
+
+
+" ag stuff 
+let g:ag_prg="ag"
+" binds \ to search for word under cursor
+nmap \ :Ag <c-r>=expand("<cword>")<cr> <cr>
+" binds left and right to jump through results of search
+nmap <silent> <RIGHT> :cnext<CR>
+nmap <silent> <LEFT> :cprev<CR>
+
+
+" Makes syntastic not check for errors when you're quiting vim
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_check_on_open = 0
+"let g:syntastic_enable_signs = 0
+
+
+" Bufferline config
+let g:bufferline_echo = 0
+let g:bufferline_show_bufnr = 0
