@@ -68,3 +68,31 @@ let g:bufferline_echo = 0
 let g:bufferline_active_buffer_left = ""
 let g:bufferline_active_buffer_right = ""
 let g:bufferline_show_bufnr = 0
+
+
+"" Semantic highlight config
+nmap <C-s> :SemanticHighlightToggle<cr>
+let g:semanticTermColors = [28,1,2,3,5,6,7,25,9,10,11,34,12,13,14,15,125,124,51,252,99]
+
+
+" Lightline config
+let g:lightline = {
+            \ 'colorscheme': 'Tomorrow',
+            \ 'active': { 
+            \   'left': [['mode'], ['line', 'filename', 'modified', 'readonly']],
+            \   'right': []
+            \ },
+            \ 'inactive': {
+            \   'left': [['filename', 'modified', 'readonly']],
+            \   'right': []
+            \ },
+            \ 'component_function': {
+            \   'readonly': 'MyReadonly',
+            \ }
+            \}
+
+
+" Sets a fancy symbol if the file is readonly
+function! MyReadonly()
+    return &readonly ? '' : ''
+endfunction

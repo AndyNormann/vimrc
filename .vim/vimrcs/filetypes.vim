@@ -3,26 +3,39 @@
 """""""""""""""""""""""
 " => Python
 """""""""""""""""""""""
-au FileType python nnoremap <leader>r :!clear;python3 %<cr>
-au FileType python nnoremap <leader>t :!clear;python3 % 
+au FileType python nnoremap <leader>r :!python3 %<cr>
+au FileType python nnoremap <leader>t :!python3 % 
+
+"""""""""""""""""""""""
+" => Ruby
+"""""""""""""""""""""""
+au FileType ruby nnoremap <leader>r :!ruby %<cr>
+au FileType ruby nnoremap <leader>t :!ruby % 
 
 """""""""""""""""""""""""""""
 " => C section
 """"""""""""""""""""""""""""""
-au FileType c nnoremap <Leader>t :!clear && ./%< 
-au FileType c nnoremap <Leader>c :!clear && gcc -Wall -Wextra -o %< %<CR>
+au FileType c nnoremap <Leader>t :!./%< 
+au FileType c nnoremap <Leader>c :!gcc -Wall -Wextra -o %< %<CR>
 au FileType c inoremap <Leader>. ->
 
 """"""""""""""""""""""""""""
 " => Cpp section
 """""""""""""""""""""""""""""
-au FileType cpp nnoremap <Leader>t :!clear && ./%< 
-au FileType cpp nnoremap <Leader>c :!clear && g++ -std=c++11 -Wall -Wextra -o %< %<CR>
+au FileType cpp nnoremap <Leader>t :!./%< 
+au FileType cpp nnoremap <Leader>c :!g++ -std=c++11 -Wall -Wextra -o %< %<CR>
 au FileType cpp inoremap <Leader>. ->
 au FileType cpp inoremap ., ::
 
 """"""""""""""""""""""""""""""
 " => Java section
 """""""""""""""""""""""""""""""
-au FileType java nnoremap <Leader>t :!clear && java %< 
-au FileType java nnoremap <Leader>c :!clear && javac *.java<CR>
+au FileType java nnoremap <Leader>t :!java %< 
+au FileType java nnoremap <Leader>c :!javac *.java<CR>
+
+""""""""""""""""""""""""""""""
+" => Go section
+"""""""""""""""""""""""""""""""
+au FileType go nnoremap <Leader>c :!go build %<cr>
+au FileType go nnoremap <Leader>t :!./%< 
+au FileType go nnoremap <Leader>r :!go run %<cr>

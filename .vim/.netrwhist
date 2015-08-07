@@ -1,6 +1,11 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_cnt =9
 let g:netrw_dirhist_1='/Users/andrew/.vim/vimrcs'
 let g:netrw_dirhist_2='/Users/andrew/.vim'
 let g:netrw_dirhist_3='/Users/andrew/.vim/templates'
 let g:netrw_dirhist_4='/Users/andrew/vimrc/.vim'
+let g:netrw_dirhist_5='/Users/andrew/Git/Code/ruby/Sites/test_cms/config'
+let g:netrw_dirhist_6='/Users/andrew/.vim/vimrcs'
+let g:netrw_dirhist_7='/Users/andrew/Git/Code/cpp/pai'
+let g:netrw_dirhist_8='/Users/andrew/Git/Code/cpp'
+let g:netrw_dirhist_9='/Users/andrew/Git/Code'

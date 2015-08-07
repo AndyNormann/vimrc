@@ -26,8 +26,8 @@ nmap <leader>e :e
 
 map <silent> <leader><cr> :noh<cr>
 " Make hotkeys
-noremap <Leader>m :!clear && make<CR>
-noremap <Leader>r :!clear && make run<CR>
+noremap <Leader>m :make<CR>
+noremap <Leader>r :make run<CR>
 " Delete trailing whitespace
 nmap <leader>` :call DeleteTrailingWS()<cr>
 
@@ -95,17 +95,27 @@ set noswapfile
 set nosmd
 set noru
 
+" No more lastline
+set display=lastline
+
 """"""""""""""""""""""""""
 " => Colors and Fonts
 """"""""""""""""""""""""""
 " Syntax highlighting
 syntax enable
 
+" Color
+set t_Co=256
+
 " Set utf8 encoding
 set encoding=utf8
 
 " Use unix as standard filetype
 set ffs=unix,dos,mac
+
+set background=dark
+"color grb256
+color blazer
 
 """""""""""""""""""""""""""
 " => Text, tabs and indent
@@ -168,7 +178,7 @@ autocmd BufNewFile *.java call NewJavaFile()
 " so you can undo even after closing a buffer/VIM
 """"""""""""""""""""""""""
 try
-    set undodir=~/.vim_runtime/temp_dirs/undodir
+    set undodir=~/.vim/temp_dirs/undodir
     set undofile
 catch
 endtry
@@ -188,5 +198,10 @@ inoremap $t <><esc>i
 """"""""""""""""""""""""
 " => Movement
 """""""""""""""""""""""
-nmap <C-j> <C-d>
-nmap <C-k> <C-u>
+nmap J 5j
+nmap K 5k
+nmap H b
+nmap L w
+
+nmap ; :
+
