@@ -17,10 +17,10 @@ Bundle 'szw/vim-g'
 Bundle 'itchyny/lightline.vim'
 Bundle 'Shougo/unite.vim'
 Bundle 'scrooloose/nerdtree'
-Bundle 'fatih/vim-go'
 Bundle 'flazz/vim-colorschemes'
 Bundle 'tpope/vim-fugitive'
 Bundle 'Valloric/YouCompleteMe'
+Bundle 'jiangmiao/auto-pairs'
 
 call vundle#end()
 
@@ -93,6 +93,8 @@ let NERDTreeHighlightCursorline=0
 nmap \ :NERDTreeToggle<cr>
 
 " YouCompleteMe
+au FileType c let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/confiles/c/.ycm_extra_conf.py'
+au FileType cpp let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/confiles/cpp/.ycm_extra_conf.py'
 let g:ycm_filetype_blacklist = {}
 let g:ycm_show_diagnostics_ui = 0
 let g:ycm_cache_omnifunc = 0
