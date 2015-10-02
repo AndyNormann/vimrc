@@ -105,7 +105,7 @@ set display=lastline
 syntax enable
 
 " Color
-set t_Co=256
+"set t_Co=256
 
 " Set utf8 encoding
 set encoding=utf8
@@ -204,4 +204,3 @@ nmap H b
 nmap L w
 
 nmap ; :
-

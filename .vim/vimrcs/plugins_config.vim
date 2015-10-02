@@ -8,7 +8,6 @@ call vundle#begin()
 Bundle 'gmarik/Vundle.vim'
 
 Bundle 'honza/vim-snippets'
-"Bundle 'garbas/vim-snipmate'
 Bundle 'SirVer/ultisnips'
 Bundle 'rking/ag.vim'
 Bundle 'MarcWeber/vim-addon-mw-utils'
@@ -21,6 +20,7 @@ Bundle 'flazz/vim-colorschemes'
 Bundle 'tpope/vim-fugitive'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'jiangmiao/auto-pairs'
+Bundle 'alem0lars/vim-colorscheme-darcula'
 
 call vundle#end()
 
@@ -28,6 +28,7 @@ call vundle#end()
 nmap <C-g> :Google <c-r>=expand("%:e")<cr> 
 
 " Lightline config
+" solarized
 let g:lightline = {
             \ 'colorscheme': 'solarized',
             \ 'active': { 
@@ -44,6 +45,16 @@ let g:lightline = {
             \ }
             \}
 
+" Set the text for modes in lightline
+function! LLMode()
+  return
+        \ lightline#mode() == 'NORMAL' ? 'N' :
+        \ lightline#mode() == 'INSERT' ? 'I' :
+        \ lightline#mode() == 'VISUAL' ? 'V' :
+        \ lightline#mode() == 'V-LINE' ? 'V' :
+        \ lightline#mode() == 'V-BLOCK' ? 'V' :
+        \ lightline#mode() == 'REPLACE' ? 'R' : lightline#mode()
+endfunction
 
 " Help functions for filename function
 function! LightLineModified()
@@ -104,3 +115,6 @@ let g:ycm_key_list_select_completion = ['<C-j>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-k>', '<Up>']
 "" Ultisnips
 let g:UltiSnipsJumpForwardTrigger="<tab>"
+
+" Tmuxline
+let g:tmuxline_powerline_separators = 0
