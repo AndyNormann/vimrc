@@ -78,7 +78,7 @@ set t_vb=
 set tm=500
 
 " Line numbers
-set number
+"set number
 
 " set 0 to jump to last non whitespace character
 map 0 ^
@@ -104,8 +104,11 @@ set display=lastline
 " Syntax highlighting
 syntax enable
 
+" Set font if not in terminal
+set guifont=PragmataPro:h15
+
 " Color
-"set t_Co=256
+set t_Co=256
 
 " Set utf8 encoding
 set encoding=utf8
@@ -113,9 +116,10 @@ set encoding=utf8
 " Use unix as standard filetype
 set ffs=unix,dos,mac
 
-set background=dark
-"color grb256
 color blazer
+"color colorful
+"color solarized
+set background=dark
 
 """""""""""""""""""""""""""
 " => Text, tabs and indent
@@ -168,7 +172,7 @@ augroup templates
 augroup END
 
 function! NewJavaFile()
-    s/FILE/\=expand("%:t:r")
+    %s/FILE/\=expand("%:t:r")/g
 endfunction
 
 autocmd BufNewFile *.java call NewJavaFile()
@@ -203,4 +207,9 @@ nmap K 5k
 nmap H b
 nmap L w
 
+nmap <leader>; :!
 nmap ; :
+
+" Mark keys
+nmap mm mM
+nmap '' 'M

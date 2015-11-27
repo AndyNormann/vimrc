@@ -23,7 +23,7 @@ au FileType c inoremap <Leader>. ->
 " => Cpp section
 """""""""""""""""""""""""""""
 au FileType cpp nnoremap <Leader>t :!./%< 
-au FileType cpp nnoremap <Leader>c :!g++ -std=c++11 -Wall -Wextra -o %< %<CR>
+au FileType cpp nnoremap <Leader>c :!g++ -std=c++14 -Wall -Wextra -o %< %<CR>
 au FileType cpp inoremap <Leader>. ->
 au FileType cpp inoremap ., ::
 
@@ -39,3 +39,13 @@ au FileType java nnoremap <Leader>c :!javac *.java<CR>
 au FileType go nnoremap <Leader>c :!go build %<cr>
 au FileType go nnoremap <Leader>t :!./%< 
 au FileType go nnoremap <Leader>r :!go run %<cr>
+
+"""""""""""""""""""""""""""""
+" => Rust section
+""""""""""""""""""""""""""""""
+au FileType rust nnoremap <Leader>c :!rustc %<cr>
+au FileType rust nnoremap <Leader>t :!./%< 
+au FileType rust nnoremap <Leader>r :!./%<<cr>
+au FileType rust inoremap ., ::
+au FileType rust nnoremap <Leader>b :!cargo build<cr>
+au FileType rust nnoremap <Leader>v :!cargo run<cr>
