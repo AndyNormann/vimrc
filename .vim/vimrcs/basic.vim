@@ -119,7 +119,16 @@ set ffs=unix,dos,mac
 color blazer
 "color colorful
 "color solarized
+"color seoul
+"color grb256
+"color railscasts
+"color 256-jungle
+"color mustang
+"color wombat256i
+"color molokai
+"color gruvbox
 set background=dark
+"color Tomorrow
 
 """""""""""""""""""""""""""
 " => Text, tabs and indent

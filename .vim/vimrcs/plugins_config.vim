@@ -2,47 +2,50 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
-"set rtp+=~/.vim/bundle/Vundle.vim
-"call vundle#begin()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
-"Bundle 'gmarik/Vundle.vim'
-set runtimepath+=~/.vim/bundle/neobundle.vim/
-call neobundle#begin(expand('~/.vim/bundle/'))
-NeoBundleFetch 'Shougo/neobundle.vim'
+Bundle 'gmarik/Vundle.vim'
+"set runtimepath+=~/.vim/bundle/neobundle.vim/
+"call neobundle#begin(expand('~/.vim/bundle/'))
+"NeoBundleFetch 'Shougo/neobundle.vim'
 
-NeoBundle 'honza/vim-snippets'
-NeoBundle 'SirVer/ultisnips'
-NeoBundle 'rking/ag.vim'
-NeoBundle 'MarcWeber/vim-addon-mw-utils'
-NeoBundle 'tomtom/tlib_vim'
-NeoBundle 'szw/vim-g'
-NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'scrooloose/nerdtree'
-NeoBundle 'flazz/vim-colorschemes'
-NeoBundle 'Valloric/YouCompleteMe'
-NeoBundle 'edkolev/tmuxline.vim'
-NeoBundle 'Valloric/YouCompleteMe', {
-            \ 'build'      : {
-            \ 'mac'     : './install.py --clang-completer --system-libclang'
-            \ }
-            \ }
-"NeoBundle 'wting/rust.vim'
-NeoBundle 'octol/vim-cpp-enhanced-highlight'
-"Bundle 'hsanson/vim-android'
+Bundle 'honza/vim-snippets'
+Bundle 'SirVer/ultisnips'
+Bundle 'rking/ag.vim'
+Bundle 'MarcWeber/vim-addon-mw-utils'
+Bundle 'tomtom/tlib_vim'
+Bundle 'szw/vim-g'
+Bundle 'itchyny/lightline.vim'
+Bundle 'Shougo/unite.vim'
+Bundle 'scrooloose/nerdtree'
+Bundle 'flazz/vim-colorschemes'
+Bundle 'Valloric/YouCompleteMe'
+Bundle 'edkolev/tmuxline.vim'
+Bundle 'tpope/vim-fugitive'
+Bundle 'vim-ruby/vim-ruby'
+"Bundle 'Valloric/YouCompleteMe', {
+"         \ 'build'      : {
+"         \ 'mac'     : './install.py --clang-completer --system-libclang'
+"         \ }
+"         \ }
+Bundle 'octol/vim-cpp-enhanced-highlight'
+Bundle 'wting/rust.vim'
 
-call neobundle#end()
-"call vundle#end()
+"call neobundle#end()
+call vundle#end()
 
 " Google things
 nmap <C-g> :Google <c-r>=expand("%:e")<cr>
 
+let g:gruvbox_contrast_dark = "hard"
+
 " Lightline config
 " solarized
 let g:lightline = {
-            \ 'colorscheme': 'solarized_dark',
+            \ 'colorscheme': 'solarized',
             \ 'active': {
-            \   'left': [['mode'], ['filename'], ['line', 'percent']],
+            \   'left': [['mode'], ['filename']],
             \   'right': []
             \ },
             \ 'inactive': {
@@ -51,19 +54,20 @@ let g:lightline = {
             \ },
             \ 'component_function': {
             \   'readonly': 'MyReadonly',
-            \   'filename': 'LightLineFilename'
+            \   'filename': 'LightLineFilename',
+            \   'mode': 'LLMode'
             \ }
             \}
 
 " Set the text for modes in lightline
 function! LLMode()
     return
-                \ lightline#mode() == 'NORMAL' ? 'N' :
-                \ lightline#mode() == 'INSERT' ? 'I' :
-                \ lightline#mode() == 'VISUAL' ? 'V' :
-                \ lightline#mode() == 'V-LINE' ? 'V' :
-                \ lightline#mode() == 'V-BLOCK' ? 'V' :
-                \ lightline#mode() == 'REPLACE' ? 'R' : lightline#mode()
+                \ lightline#mode() == 'NORMAL' ? '  N  ' :
+                \ lightline#mode() == 'INSERT' ? '  I  ' :
+                \ lightline#mode() == 'VISUAL' ? '  V  ' :
+                \ lightline#mode() == 'V-LINE' ? '  V  ' :
+                \ lightline#mode() == 'V-BLOCK' ? '  V  ' :
+                \ lightline#mode() == 'REPLACE' ? '  R  ' : lightline#mode()
 endfunction
 
 " Help functions for filename function
