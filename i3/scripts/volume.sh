@@ -7,29 +7,32 @@ mute=`pactl list sinks | grep '^[[:space:]]Mute:' | head -n $(( $SINK + 2 )) | t
 
 #mute=`pactl list sinks | grep '^[[:space:]]Mute:' | head -n $(( $SINK + 2 )) | tail -n 1'`
 
-#if [ $mute == "Mute: no" ]
-ret=`grep -q "yes" $mute`
-if [ $ret ];
+#color="#FDAC77"
+color="#8ac6f2"
+
+if [ !mute ];
 then
     if [ $vol -eq 100 ]
     then 
-        echo "  $vol"
+        #echo "  $vol"
+        echo '<span background="'$color'" foreground="#000000">' '' $vol '</span>'
     elif [ $vol -ge 50 ]
     then 
-        echo "   $vol"
+        #echo "   $vol"
+        echo '<span background="'$color'" foreground="#000000">' '' $vol '</span>'
     elif [ $vol -lt 50 ]
     then
         if [ $vol -lt 10 ]
         then
-            echo "       $vol"
+            #echo "       $vol"
+            echo '<span background="'$color'" foreground="#000000">' '' $vol '</span>'
         else 
-            echo "    $vol"
+            #echo "    $vol"
+            echo '<span background="'$color'" foreground="#000000">' '' $vol '</span>'
         fi
     else
         :
     fi
 else
-    #echo $mute
-    echo $ret
-    #echo "  Muted " 
+    echo "  Muted " 
 fi

@@ -10,11 +10,16 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod1
+#set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 #font pango:monospace 22, Awesome 22
-font xft:PragmataPro 22, Awesome 22
+#font xft:PragmataPro for Powerline 18, Awesome 18
+#font xft:PragmataPro for Powerline 24, Awesome 24
+#font xft:System San Francisco Display Regular 27, Awesome 27
+font xft:System San Francisco Display Regular 24, Awesome 24
+#font xft:System San Francisco Display Regular 26, Awesome 26
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -31,15 +36,25 @@ font xft:PragmataPro 22, Awesome 22
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec termite
-bindsym $mod+Shift+Return exec google-chrome-stable --force-device-scale-factor=2
+bindsym $mod+Return exec termite #termite -e tmux attach || tmux new-session termite urxvt
+#bindsym $mod+Shift+Return exec google-chrome-stable --force-device-scale-factor=2
+bindsym $mod+Shift+Return exec chromium-browser --force-device-scale-factor=2
+bindsym $mod+Shift+m exec spotify --force-device-scale-factor=2
+bindsym $mod+Control+l exec ~/.config/i3/scripts/lock.sh ~/Pictures/lock.png
+
+
+bindsym $mod+Control+r exec ~/scripts/rotate.sh
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
 #bindsym $mod+space exec dmenu_run
-bindsym $mod+space exec i3-dmenu-desktop --dmenu='rofi -dmenu'
+#bindsym $mod+space exec j4-dmenu-desktop --dmenu='dmenu' 
+#bindsym $mod+space exec rofi -show -dmenu
+#bindsym $mod+space exec --no-startup-id j4-dmenu-desktop --dmenu='rofi -i -dmenu -font "System San Francisco Regular 24" -bg "#222222" -fg "#888888" -hlbg "#285577" -hlfg "#ffffff" -opacity 90 -m 0 -location 2'
+bindsym $mod+space exec j4-dmenu-desktop --dmenu="rofi -width 30 -i -dmenu -p '' -lines 7 -separator-style none -hide-scrollbar -eh 2 -padding 20 -bw 0 -bc '#2f343f' -bg '#2f343f' -fg '#f3f4f5' -hlbg '#2f343f' -hlfg '#cf6a4c' -font 'System San Francisco Display 14'" 
+
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -49,6 +64,8 @@ bindsym $mod+space exec i3-dmenu-desktop --dmenu='rofi -dmenu'
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 1 +5% #increase sound volume
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume 1 -5% #decrease sound volume
 bindsym XF86AudioMute exec pactl set-sink-mute 1 toggle # mute sound
+
+bindsym XF86AudioPlay exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
 
 # change focus
 bindsym $mod+j focus left
@@ -100,9 +117,12 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindsym $mod+d focus child
 
+set $WS1 workspace 1:  
+set $WS2 workspace 2: 
+
 # switch to workspace
-bindsym $mod+1 workspace 1: 
-bindsym $mod+2 workspace 2:  
+bindsym $mod+1 $WS1
+bindsym $mod+2 $WS2
 bindsym $mod+3 workspace 3: 
 bindsym $mod+4 workspace 4: 
 bindsym $mod+5 workspace 5: 
@@ -113,8 +133,8 @@ bindsym $mod+9 workspace 9: 
 bindsym $mod+0 workspace 10: 
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1: 
-bindsym $mod+Shift+2 move container to workspace 2:  
+bindsym $mod+Shift+1 move container to $WS1
+bindsym $mod+Shift+2 move container to $WS2
 bindsym $mod+Shift+3 move container to workspace 3: 
 bindsym $mod+Shift+4 move container to workspace 4: 
 bindsym $mod+Shift+5 move container to workspace 5: 
@@ -162,14 +182,18 @@ bindsym $mod+r mode "resize"
 
 set $unfocused  "#3D4341"
 set $white  "#000000"
-set $bg     "#000026"
+#set $bg     "#000026"
 set $bg     "#111213"
-set $lime   "#CCFEA5"
+set $lime   "#FFFFFF"
+#set $lime   "#8ac6f2"
+
 set $red    "#DA3E63"
 
 bar {
-        status_command i3blocks -c ~/.i3/i3blocks.conf
-        #strip_workspace_numbers yes
+        status_command i3blocks -c ~/.config/i3/i3blocks.conf
+        tray_padding 0
+        #mode hide
+        #modifier Mod4
         colors {
                 background          $bg
                 focused_workspace   $bg $lime $bg
@@ -180,8 +204,25 @@ bar {
 }
 
 new_window none
-exec --no-startup-id feh --bg-scale ~/Pictures/bg.png
+#exec --no-startup-id feh --bg-scale ~/Pictures/bg.png
 #exec --no-startup-id feh --bg-scale ~/Pictures/doge.jpg
 exec export GDK_SCALE=2
 
+exec --no-startup-id i3-msg '$WS2; exec termite;$WS1; exec chromium-browser --force-device-scale-factor=2';
+
+exec --no-startup-id nm-applet
+exec --no-startup-id pasystray
+
+exec --no-startup-id setxkbmap -model pc105 -layout us -option compose:ralt -option grp:ctrl_alt_toggle -option ctrl:nocaps
+
+exec xcape -e 'Control_L=Escape'
+
+exec --no-startup-id dunst
+
+exec --no-startup-id feh --bg-fill ~/Pictures/4kmountain.jpg
+
+#exec --no-startup-id onboard
+exec --no-startup-id pm-powersave true
+exec --no-startup-id xset s off -dpms
+#exec touchegg
 

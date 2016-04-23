@@ -3,9 +3,13 @@ status=`acpi -b | awk '{print $3}' | tr -d ,`
 percent=`acpi -b | acpi -b | awk '{print $4}' | cut -d % -f 1`
 if [ $status == "Charging" ]
 then
-	echo "   $percent" 
+	echo "  $percent" 
 else
-	if [ $percent -lt 20 ]
+    if   [ $percent -lt 6]
+    then
+        notify-send -u critical BATTERY "CRITICALLY LOW";
+		echo " $percent";
+	elif [ $percent -lt 20 ]
 	then 
 		echo " $percent";
 	elif [ $percent -lt 40 ]
