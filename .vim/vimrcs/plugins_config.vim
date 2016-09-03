@@ -1,44 +1,24 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+Plug 'rking/ag.vim'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'szw/vim-g'
+Plug 'itchyny/lightline.vim'
+Plug 'Shougo/unite.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'flazz/vim-colorschemes'
+Plug 'edkolev/tmuxline.vim'
+Plug 'octol/vim-cpp-enhanced-highlight'
 
-Bundle 'gmarik/Vundle.vim'
-"set runtimepath+=~/.vim/bundle/neobundle.vim/
-"call neobundle#begin(expand('~/.vim/bundle/'))
-"NeoBundleFetch 'Shougo/neobundle.vim'
-
-Bundle 'honza/vim-snippets'
-Bundle 'SirVer/ultisnips'
-Bundle 'rking/ag.vim'
-Bundle 'MarcWeber/vim-addon-mw-utils'
-Bundle 'tomtom/tlib_vim'
-Bundle 'szw/vim-g'
-Bundle 'itchyny/lightline.vim'
-Bundle 'Shougo/unite.vim'
-Bundle 'scrooloose/nerdtree'
-Bundle 'flazz/vim-colorschemes'
-Bundle 'Valloric/YouCompleteMe'
-Bundle 'edkolev/tmuxline.vim'
-Bundle 'tpope/vim-fugitive'
-Bundle 'vim-ruby/vim-ruby'
-"Bundle 'Valloric/YouCompleteMe', {
-"         \ 'build'      : {
-"         \ 'mac'     : './install.py --clang-completer --system-libclang'
-"         \ }
-"         \ }
-Bundle 'octol/vim-cpp-enhanced-highlight'
-Bundle 'wting/rust.vim'
-
-"call neobundle#end()
-call vundle#end()
 
 " Google things
 nmap <C-g> :Google <c-r>=expand("%:e")<cr>
 
-let g:gruvbox_contrast_dark = "hard"
+"let g:gruvbox_contrast_dark = "hard"
 
 " Lightline config
 " solarized

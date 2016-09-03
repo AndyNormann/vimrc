@@ -215,7 +215,7 @@ exec --no-startup-id pasystray
 
 exec --no-startup-id setxkbmap -model pc105 -layout us -option compose:ralt -option grp:ctrl_alt_toggle -option ctrl:nocaps
 
-exec xcape -e 'Control_L=Escape'
+#exec xcape -e 'Control_L=Escape'
 
 exec --no-startup-id dunst
 
