@@ -5,12 +5,15 @@
   (setq package-enable-at-startup nil)
 
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+  (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 
   (package-initialize)
 
 ;;; Custom.el
   (setq custom-file "~/.emacs.d/custom.el")
   (load custom-file)
+
+  (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 ;;; Plugins
 
@@ -19,6 +22,50 @@
     (package-refresh-contents)
     (package-install 'use-package))
   (require 'use-package)
+
+  (use-package custom-powerline-theme
+    :init
+    (setq powerline-evil-tag-style (quote verbose))
+    :config
+    (custom-powerline-evil-theme))
+  ;(load-theme 'sanityinc-tomorrow-bright)
+  (setq gruvbox-contrast 'hard)
+  (load-theme 'gruvbox)
+
+  (use-package evil :ensure t
+    :config
+    (evil-mode 1)
+    (global-evil-leader-mode 1)
+    (evil-leader/set-leader "SPC")
+    (setq evil-leader/in-all-states 1)
+    (evil-leader/set-key
+    "m" 'recompile-quietly
+    "r" 'shell-command
+    "w" 'evil-write
+    "l" 'switch-to-compilation-buffer
+    "t" 'switch-to-term-or-back
+    "b" 'ivy-switch-buffer
+    "e" 'counsel-find-file
+    "s" 'swiper
+    "c" 'comment-or-uncomment-region)
+    (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+    (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+    (define-key evil-normal-state-map (kbd "C-u") 'scroll-page-up-and-center)
+    (define-key evil-insert-state-map (kbd "C-n") 'company-simple-complete-next)
+    (define-key evil-insert-state-map (kbd "C-p") 'company-simple-complete-previous)
+    (define-key evil-normal-state-map (kbd ";") 'evil-ex)
+    (define-key evil-visual-state-map (kbd "zf") 'vimish-fold)
+    (evil-vimish-fold-mode 1))
+
+  (defun scroll-page-up-and-center ()
+    (interactive)
+    (evil-scroll-page-up 0)
+    (evil-scroll-line-to-center 0))
+
+  (use-package evil-surround :ensure t
+    :config
+    (global-evil-surround-mode 1))
+
 
   (use-package yasnippet :ensure t
     :config
@@ -34,36 +81,45 @@
     :config
     (ivy-mode 1))
 
-  (use-package evil :ensure t
+  (use-package company :ensure t
     :config
-    (evil-mode 1)
-    (global-evil-leader-mode 1)
-    (evil-leader/set-leader "SPC")
-    (evil-leader/set-key
-    "m" 'recompile-quietly
-    "r" 'shell-command
-    "w" 'evil-write
-    "l" 'switch-to-compilation-buffer
-    "t" 'switch-to-term-or-back
-    "b" 'ivy-switch-buffer
-    "e" 'counsel-find-file
-    "s" 'swiper
-    "c" 'comment-or-uncomment-region
+    (global-company-mode)
+    (require 'company-simple-complete)
+    ;; (define-key company-active-map (kbd "<C-j>") 'company-simple-complete-next)
+    ;; (define-key company-active-map (kbd "<C-k>") 'company-simple-complete-previous)
     )
-    (define-key evil-normal-state-map (kbd ";") 'evil-ex))
+
+  
+
+
+  ;(use-package company-simple-complete)
+  ;(require 'company-simple-complete)
+
+  (use-package smartparens-config 
+    :config
+    (smartparens-global-mode))
 
 
 ;;; General settings
-
-    (setq evil-mode-line-format '(before . mode-line-front-space)) 
-
-    (load-theme 'sanityinc-tomorrow-bright)
 
     (menu-bar-mode -1)
     (tool-bar-mode -1)
     (show-paren-mode t)
     (xclip-mode t)
     (xterm-mouse-mode t)
+    (blink-cursor-mode 0)
+    (setq-default cursor-type 'box) 
+
+    (add-to-list 'default-frame-alist '(font . "PragmataPro for Powerline 18" ))
+    (set-face-attribute 'default t :font "PragmataPro for Powerline 18")
+
+    (if (display-graphic-p)
+        (scroll-bar-mode -1))
+    (if (display-graphic-p)
+          (fringe-mode 1))
+    (if (display-graphic-p)
+          (toggle-frame-fullscreen))
+
 
     (setq make-backup-files nil)
     (setq auto-save-default nil)
@@ -83,6 +139,9 @@
     (setq inhibit-startup-screen +1)
     (setq initial-major-mode 'org-mode)
     (setq initial-scratch-message nil)
+    (setq ring-bell-function 'ignore)
+
+    (setq gnuplot-program "/usr/local/Cellar/gnuplot/5.0.4/bin/gnuplot")
 
 
 ;;; Mode hooks
@@ -121,6 +180,15 @@
                         (format "go run %s"
                                  file))))))
 
+(add-hook 'java-mode-hook
+          (lambda ()
+            (unless (file-exists-p "build.xml")
+              (set (make-local-variable 'compile-command)
+                   (let ((file (file-name-nondirectory buffer-file-name)))
+                     (format "javac *.java && java %s"
+                             (file-name-sans-extension file)))))))
+
+
 ;; Compilation mode
 (add-hook 'compilation-mode-hook '(lambda ()
                                     (local-unset-key "g")
@@ -129,6 +197,8 @@
                                     (evil-define-key 'motion compilation-mode-map "h" 'evil-backward-char)
                                     (evil-define-key 'motion compilation-mode-map "e" 'kill-compilation)
                                     ))
+
+(setenv "PATH" (concat (getenv "PATH") "~/Library/TexShop/bin/"))
 
 ;;; Helper functions
 (defun recompile-quietly ()
