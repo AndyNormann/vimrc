@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: div
+# key: div
+# expand-env: ((yas-indent-line 'fixed))
+# --
+${1:div} [] [$0]

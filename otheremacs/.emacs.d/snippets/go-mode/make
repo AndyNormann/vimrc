@@ -1,0 +1,5 @@
+# -*- mode:snippet -*-
+# name: make
+# key: make
+# --
+${1:name} := make([]${2:type}, 0)$0

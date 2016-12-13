@@ -1,0 +1,128 @@
+ls
+cd cpp/
+ls
+.
+cd go/
+ls
+cd src/halla/
+ls
+ff main.go 
+ls
+cd
+cd Downloads/
+ls
+cd emacs-master/
+ls
+./configure --with-x-toolkit=gtk3 --with-xwidgets
+./configure --with-xwidgets --with-x-toolkit=gtk3
+./configure --with-xwidgets --with-x-toolkit=gtk3 -with-x
+ls
+ff configure.ac
+ls
+./configure --with-x
+./configure --with-x --with-xwidgets
+./configure --with-x --with-x-toolkit=gtk3
+./configure --with-x --with-x-toolkit=gtk3 --with-xwidgets
+ls
+ff INSTALL
+ls
+./configure --with-x --with-x-toolkit=gtk --with-xwidgets
+./configure --with-x --with-x-toolkit=gtk --with-xwidgets with-ns=no
+./configure --with-x --with-x-toolkit=gtk --with-xwidgets --with-ns=no
+brew search xcb-shm
+cd
+cd /usr/local/Cellar/gtk+3/
+ls
+cd 3.20.6/
+ls
+cd bin
+ls
+.
+cd include/
+ls
+cd gtk-3.0/
+ls
+cd gtk/
+ls
+ls
+pwd
+export GTK_LIBS=/usr/local/Cellar/gtk+3/3.20.6/include/gtk-3.0/gtk
+cd
+cd Downloads/
+ls
+cd emacs-master/
+ls
+./configure --with-x --with-x-toolkit=gtk --with-xwidgets --with-ns=no
+./configure --with-x --with-x-toolkit=gtk --with-xwidgets
+./configure --with-x --with-x-toolkit=gtk3 --with-xwidgets
+ls
+cd
+cd Git/Code/cpp/
+ls
+.
+cd c/hackerrank/datastructures/linkedlist/
+ls
+./11_detectcycle 
+./11_detectcycle 
+ls
+./11_detectcycle 
+./11_detectcycle 
+ls
+la
+l
+ls
+.
+cd android/
+ls
+make
+la
+ls
+l
+ls
+ls
+cat hallo.c
+./halla
+cat halla.c
+clang hallo.c
+./a.out 1 2 3 4
+clang hallo.c
+./a.out 1 2 3 4
+cat hallo.c
+cat halla.c
+clang halla.c
+./a.out 1 2 3 4
+ssh inf5063@oslo.mlab.no
+ssh inf5063-g13@oslo.mlab.no
+ls
+simula
+ssh simula
+ls
+cd warmup/
+ls
+cd ..
+ls
+dc implementation/
+ls
+cd implementation/
+ls
+ls
+cd
+ls
+la
+exa
+cd .cargo
+ls
+cd bin/
+ls
+cd
+exa
+find-files .zshrc
+find-file .zshrc
+ls
+l
+ls
+find-file halla.c
+vim halla.c
+l
+ls
+la

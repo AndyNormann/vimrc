@@ -12,6 +12,11 @@ au FileType python nnoremap <leader>t :!python3 %
 au FileType ruby nnoremap <leader>r :!ruby %<cr>
 au FileType ruby nnoremap <leader>t :!ruby % 
 
+"""""""""""""""""""""""
+" => Elm
+"""""""""""""""""""""""
+au FileType elm nnoremap <leader>c :ElmMake<cr>
+
 """""""""""""""""""""""""""""
 " => C section
 """"""""""""""""""""""""""""""
@@ -23,8 +28,9 @@ au FileType c inoremap <Leader>. ->
 """"""""""""""""""""""""""""
 " => Cpp section
 """""""""""""""""""""""""""""
-au FileType cpp nnoremap <Leader>t :!./%< 
-au FileType cpp nnoremap <Leader>c :AsyncRun g++ -std=c++14 -Wall -Wextra -o %< %
+au FileType cpp nnoremap <Leader>t :!/tmp/%<
+"au FileType cpp nnoremap <Leader>t :!./%< 
+au FileType cpp nnoremap <Leader>c :AsyncRun clang++ -Weverything -std=c++14 -o /tmp/%:t:r %
 "au FileType cpp nnoremap <Leader>c :!g++ -std=c++14 -Wall -Wextra -o %< %<CR>
 au FileType cpp inoremap <Leader>. ->
 au FileType cpp inoremap ., ::
@@ -33,7 +39,7 @@ au FileType cpp inoremap ., ::
 " => Java section
 """""""""""""""""""""""""""""""
 au FileType java nnoremap <Leader>t :!java %< 
-au FileType java nnoremap <Leader>c :AsyncRun javac *.java<CR>
+au FileType java nnoremap <Leader>c :AsyncRun javac *.java
 
 """"""""""""""""""""""""""""""
 " => Go section
@@ -45,7 +51,7 @@ au FileType go nnoremap <Leader>r :!go run %<cr>
 """""""""""""""""""""""""""""
 " => Rust section
 """"""""""""""""""""""""""""""
-au FileType rust nnoremap <Leader>c :AsynrRun rustc %<cr>
+au FileType rust nnoremap <Leader>c :AsyncRun rustc %<cr>
 au FileType rust nnoremap <Leader>t :!./%< 
 au FileType rust nnoremap <Leader>r :!./%<<cr>
 au FileType rust inoremap ., ::

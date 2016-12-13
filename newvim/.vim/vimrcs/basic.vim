@@ -111,7 +111,7 @@ set display=lastline
 syntax enable
 
 " Set font if not in terminal
-set guifont=PragmataPro:h15
+set guifont=IosevkaTerm:h15
 
 " Color
 set t_Co=256
@@ -154,6 +154,7 @@ set viminfo^=%
 
 " Makes all copy and paste go to system clipboard
 set clipboard=unnamed
+
 
 """""""""""""""""""""""""""""
 " => Helper Functions

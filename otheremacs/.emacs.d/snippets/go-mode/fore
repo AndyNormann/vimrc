@@ -1,0 +1,7 @@
+# -*- mode:snippet -*-
+# name: for range
+# key: fore
+# --
+for ${1:it}, ${2:elem} := range($3) {
+  $0
+}
