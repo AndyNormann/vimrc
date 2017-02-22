@@ -16,6 +16,12 @@
   (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 ;;; Plugins
+  ;(load-theme 'base16-default-dark)
+  (load-theme 'gruvbox)
+
+  ;; (setq sml/theme 'respectful)
+  ;; (sml/setup)
+
 
   ; Make sure we have use-package
   (unless (package-installed-p 'use-package)
@@ -28,9 +34,13 @@
     (setq powerline-evil-tag-style (quote verbose))
     :config
     (custom-powerline-evil-theme))
-  ;(load-theme 'sanityinc-tomorrow-bright)
-  (setq gruvbox-contrast 'hard)
-  (load-theme 'gruvbox)
+
+  (eval-after-load "company" '(diminish 'company-mode))
+  (eval-after-load "smartparens" '(diminish 'smartparens-mode))
+  (eval-after-load "ivy" '(diminish 'ivy-mode))
+  (eval-after-load "yasnippet" '(diminish 'yas-minor-mode))
+  (eval-after-load "Undo-Tree" '(diminish 'undo-tree-mode))
+
 
   (use-package evil :ensure t
     :config
@@ -42,7 +52,7 @@
     "m" 'recompile-quietly
     "r" 'shell-command
     "w" 'evil-write
-    "l" 'switch-to-compilation-buffer
+    "o" 'switch-to-compilation-buffer
     "t" 'switch-to-term-or-back
     "b" 'ivy-switch-buffer
     "e" 'counsel-find-file
@@ -50,17 +60,20 @@
     "c" 'comment-or-uncomment-region)
     (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
     (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-    (define-key evil-normal-state-map (kbd "C-u") 'scroll-page-up-and-center)
     (define-key evil-insert-state-map (kbd "C-n") 'company-simple-complete-next)
     (define-key evil-insert-state-map (kbd "C-p") 'company-simple-complete-previous)
+    (define-key evil-normal-state-map (kbd "{") 'move-up-and-center)
+    (define-key evil-normal-state-map (kbd "}") 'move-down-and-center)
     (define-key evil-normal-state-map (kbd ";") 'evil-ex)
-    (define-key evil-visual-state-map (kbd "zf") 'vimish-fold)
-    (evil-vimish-fold-mode 1))
+    (define-key evil-normal-state-map (kbd ":") 'evil-repeat-find-char))
 
-  (defun scroll-page-up-and-center ()
+  (defun move-down-and-center()
     (interactive)
-    (evil-scroll-page-up 0)
-    (evil-scroll-line-to-center 0))
+    (evil-next-visual-line 5))
+
+  (defun move-up-and-center()
+    (interactive)
+    (evil-previous-visual-line 5))
 
   (use-package evil-surround :ensure t
     :config
@@ -84,17 +97,8 @@
   (use-package company :ensure t
     :config
     (global-company-mode)
-    (require 'company-simple-complete)
-    ;; (define-key company-active-map (kbd "<C-j>") 'company-simple-complete-next)
-    ;; (define-key company-active-map (kbd "<C-k>") 'company-simple-complete-previous)
-    )
-
+    (require 'company-simple-complete))
   
-
-
-  ;(use-package company-simple-complete)
-  ;(require 'company-simple-complete)
-
   (use-package smartparens-config 
     :config
     (smartparens-global-mode))
@@ -110,13 +114,11 @@
     (blink-cursor-mode 0)
     (setq-default cursor-type 'box) 
 
-    (add-to-list 'default-frame-alist '(font . "PragmataPro for Powerline 18" ))
-    (set-face-attribute 'default t :font "PragmataPro for Powerline 18")
+    (add-to-list 'default-frame-alist '(font . "Iosevka Term 17" ))
+    (set-face-attribute 'default t :font "Iosevka Term 17")
 
     (if (display-graphic-p)
         (scroll-bar-mode -1))
-    (if (display-graphic-p)
-          (fringe-mode 1))
     (if (display-graphic-p)
           (toggle-frame-fullscreen))
 
@@ -152,6 +154,8 @@
                    (format "cargo run")))))
 
 (add-hook 'c-mode-hook
+          (setq tab-width 4)
+          (setq c-basic-offset 4)
           (lambda ()
             (unless (file-exists-p "Makefile")
               (set (make-local-variable 'compile-command)
@@ -174,6 +178,7 @@
 (add-hook 'go-mode-hook '(lambda ()
             (setq tab-width 4)
             (setq indent-tabs-mode nil)
+            (set (make-local-variable 'company-backends) '(company-go))
             (if (not (string-match "go" compile-command))
                 (set (make-local-variable 'compile-command)
                     (let ((file (file-name-nondirectory buffer-file-name)))

@@ -1,31 +1,50 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+call plug#begin()
+
 Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips'
 Plug 'rking/ag.vim'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'szw/vim-g'
-Plug 'itchyny/lightline.vim'
 Plug 'Shougo/unite.vim'
 Plug 'scrooloose/nerdtree'
-Plug 'flazz/vim-colorschemes'
-Plug 'edkolev/tmuxline.vim'
-Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'chriskempson/base16-vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'skywind3000/asyncrun.vim'
+Plug 'itchyny/lightline.vim'
+Plug 'cocopon/lightline-hybrid.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'Raimondi/delimitMate'
+Plug 'ElmCast/elm-vim'
+Plug 'fatih/vim-go'
+Plug 'jodosha/vim-godebug'
+Plug 'rust-lang/rust.vim'
+Plug 'wookiehangover/jshint.vim'
+Plug 'rhysd/vim-clang-format'
+"Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-go', { 'do': 'make'}
+Plug 'zchee/deoplete-clang'
+"Plug 'sebastianmarkow/deoplete-rust'
 
+call plug#end()
+
+" Removes the --insert-- and so on
+set noshowmode
 
 " Google things
-nmap <C-g> :Google <c-r>=expand("%:e")<cr>
+nmap <leader>g :Google <c-r>=expand("%:e")<cr> 
 
-"let g:gruvbox_contrast_dark = "hard"
+set background=dark
 
-" Lightline config
-" solarized
+" Lightline
 let g:lightline = {
-            \ 'colorscheme': 'solarized',
-            \ 'active': {
-            \   'left': [['mode'], ['filename']],
+            \ 'colorscheme': 'hybrid',
+            \ 'active': { 
+            \   'left': [ [ 'mode' ], ['fugitive'], ['filename', 'line', 'AsyncStatus'] ],
             \   'right': []
             \ },
             \ 'inactive': {
@@ -35,22 +54,38 @@ let g:lightline = {
             \ 'component_function': {
             \   'readonly': 'MyReadonly',
             \   'filename': 'LightLineFilename',
-            \   'mode': 'LLMode'
+            \   'AsyncStatus': 'MyAsyncRunStatus',
+            \   'fugitive': 'MyFugitive'
             \ }
             \}
 
-" Set the text for modes in lightline
-function! LLMode()
-    return
-                \ lightline#mode() == 'NORMAL' ? '  N  ' :
-                \ lightline#mode() == 'INSERT' ? '  I  ' :
-                \ lightline#mode() == 'VISUAL' ? '  V  ' :
-                \ lightline#mode() == 'V-LINE' ? '  V  ' :
-                \ lightline#mode() == 'V-BLOCK' ? '  V  ' :
-                \ lightline#mode() == 'REPLACE' ? '  R  ' : lightline#mode()
+
+
+let g:unite_force_overwrite_statusline = 0
+
+
+function! MyFugitive()
+  try
+    if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
+      let _ = fugitive#head()
+      return strlen(_) ? "\ue0a0 "._ : ''
+    endif
+  catch
+  endtry
+  return ''
 endfunction
 
-" Help functions for filename function
+" Sets a fancy symbol if the file is readonly
+function! LightLineReadonly()
+    if &filetype == "help"
+        return ""
+    elseif &readonly
+        return ""
+    else
+        return ""
+    endif
+endfunction
+
 function! LightLineModified()
     if &filetype == "help"
         return ""
@@ -63,21 +98,19 @@ function! LightLineModified()
     endif
 endfunction
 
-function! LightLineReadonly()
-    if &filetype == "help"
-        return ""
-    elseif &readonly
-        return "⭤"
-    else
-        return ""
-    endif
-endfunction
-" Gives all filename information in the filename
 function! LightLineFilename()
     return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
                 \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
                 \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
 endfunction
+
+function! MyAsyncRunStatus()
+  return
+              \ g:asyncrun_status == 'success' ? "\u2714" : 
+              \ g:asyncrun_status == 'failure' ? "\u2718" :
+              \ "-"
+endfunction
+
 
 " Unite config
 let g:unite_split_rule = "botright"
@@ -87,9 +120,16 @@ let g:unite_source_line_enable_highlight = 1
 let g:unite_force_overwrite_statusline = 0
 
 "" Unite binds
-map <C-b> :Unite buffer<cr>
-map <C-f> :Unite line -start-insert<cr>
-map <C-e> :Unite file_rec<cr>
+map <leader>b :Unite buffer<cr>
+map <leader>f :Unite line -start-insert<cr>
+
+" Deoplete
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_complete_start_length = 1
+let g:deoplete#auto_complete_delay = 50
+let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+set completeopt-=preview
+
 
 "" NERDTree settings
 let NERDTreeRespectWildIgnore=1
@@ -97,20 +137,73 @@ let NERDTreeShowHidden=1
 let NERDTreeHighlightCursorline=0
 nmap \ :NERDTreeToggle<cr>
 
-" YouCompleteMe
-let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
-let g:ycm_filetype_blacklist = {}
-let g:ycm_show_diagnostics_ui = 0
-let g:ycm_cache_omnifunc = 0
-" Makes youcompleteme not use the preview window
-set completeopt=menuone
-let g:ycm_key_list_select_completion = ['<C-j>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-k>', '<Up>']
-"" Ultisnips
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-nmap <C-s> <esc>mM :YcmCompleter GoTo<cr>
-
-" Tmuxline
-let g:tmuxline_powerline_separators = 0
-
 let g:cpp_class_scope_highlight = 1
+
+" Ultisnips
+inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+let g:UltiSnipsSnippetsDir="~/.vim/snippets"
+
+" AsyncRun
+noremap <silent><leader>o :call asyncrun#quickfix_toggle(10)<cr>
+noremap <leader>m :AsyncRun <Up>
+noremap <leader>r :AsyncRun 
+
+" GoMode stuff
+let g:go_fmt_autosave = 1
+let g:go_fmt_fail_silently = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_metalinter_autosave = 1
+
+" C stuff
+let g:clang_format#code_style = 'WebKit'
+let g:deoplete#sources#clang#libclang_path = '/usr/local/Cellar/llvm/3.9.1/lib/libclang.dylib'
+let g:deoplete#sources#clang#clang_header = '/usr/local/Cellar/llvm/3.9.1/lib/clang'
+
+" Rust stuff
+let g:deoplete#sources#rust#racer_binary='/Users/andreasnormann/.cargo/bin/racer'
+let g:deoplete#sources#rust#rust_source_path='/Users/andreasnormann/.scripts/rust/src'
+let g:ycm_rust_src_path = "/Users/andreasnormann/.scripts/rust/src"
+let g:rustc_path = "/Users/andreasnormann/.cargo/bin/rustc"
+let g:rustfmt_autosave = 1
+let g:rustfmt_fail_silently = 1
+
+" Elm 
+let g:elm_make_output_file = "index.html"
+let g:elm_jump_to_error = 1
+let g:elm_format_autosave = 1
+let g:elm_format_fail_silently = 1
+let g:elm_detailed_complete = 1
+
+" Neovim term
+tnoremap <Esc> <C-\><C-n>
+
+"set background=light
+"color blazer
+"color colorful
+"color solarized
+"color seoul
+"color grb256
+"color railscasts
+"color 256-jungle
+"color mustang
+"color wombat256i
+"color molokai
+"let g:gruvbox_contrast_dark = 'hard'
+"color gruvbox
+"color hybrid
+"color sourcerer
+"color base16-eighties
+color base16-default-dark
+"color base16-onedark
+"color smyck
+"color lxvc
+"color Tomorrow
+"color Tomorrow-Night-Eighties
+"color Tomorrow-Night-Bright

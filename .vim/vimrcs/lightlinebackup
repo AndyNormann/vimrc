@@ -96,3 +96,86 @@ let g:lightline = {
 function! MyReadonly()
     return &readonly ? '' : ''
 endfunction
+
+
+"""""""""" NEWW STUFF!!!!!!!!!!!!!!!!!!
+
+" Lightline config
+" solarized
+" seoul256
+" Tomorrow_Night_Eighties
+"let g:lightline = {
+            "\ 'colorscheme': 'Tomorrow_Night',
+            "\ 'active': {
+            "\   'left': [['mode'], ['filename'], ['line', 'AsyncStatus']],
+            "\   'right': []
+            "\ },
+            "\ 'inactive': {
+            "\   'left': [['filename']],
+            "\   'right': []
+            "\ },
+            "\ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
+            "\ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
+            "\ 'component_function': {
+            "\   'readonly': 'MyReadonly',
+            "\   'filename': 'LightLineFilename',
+            "\   'mode': 'LLMode',
+            "\   'AsyncStatus' : 'AsyncRunStatus'
+            "\ }
+            "\}
+
+"" Set the text for modes in lightline
+"function! LLMode()
+    "return
+                "\ lightline#mode() == 'NORMAL' ? 'NORMAL' :
+                "\ lightline#mode() == 'INSERT' ? 'INSERT' :
+                "\ lightline#mode() == 'VISUAL' ? 'VISUAl' :
+                "\ lightline#mode() == 'V-LINE' ? 'V-LINE' :
+                "\ lightline#mode() == 'V-BLOCK' ? 'V-BLOCK' :
+                "\ lightline#mode() == 'REPLACE' ? 'REPLACE' : lightline#mode()
+"endfunction
+
+"" Help functions for filename function
+"function! LightLineModified()
+    "if &filetype == "help"
+        "return ""
+    "elseif &modified
+        "return "+"
+    "elseif &modifiable
+        "return ""
+    "else
+        "return ""
+    "endif
+"endfunction
+
+"function! AsyncRunStatus()
+    "return g:asyncrun_status
+"endfunction
+
+function! LightLineReadonly()
+    if &filetype == "help"
+        return ""
+    elseif &readonly
+        return "⭤"
+    else
+        return ""
+    endif
+endfunction
+" Gives all filename information in the filename
+function! LightLineFilename()
+    return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+                \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
+                \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+endfunction
+
+
+
+" YouCompleteMe
+"let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
+"let g:ycm_filetype_blacklist = {}
+"let g:ycm_show_diagnostics_ui = 0
+"let g:ycm_cache_omnifunc = 0
+"" Makes youcompleteme not use the preview window
+"set completeopt=menuone
+"let g:ycm_key_list_select_completion = ['<C-j>', '<Down>']
+"let g:ycm_key_list_previous_completion = ['<C-k>', '<Up>']

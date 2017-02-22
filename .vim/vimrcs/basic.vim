@@ -11,9 +11,12 @@ filetype indent on
 " Set to auto read when a file is changed from the outside
 set autoread
 
-" Set leader key
-let mapleader = ","
-let g:mapleader = ","
+" Set eader key
+"let mapleader = ","
+"let g:mapleader = ","
+
+let mapleader = "\<Space>"
+let g:mapleader = "\<Space>"
 
 """"""""""""""""""""""""""
 " => Leader hotkeys
@@ -26,14 +29,15 @@ nmap <leader>e :e
 
 map <silent> <leader><cr> :noh<cr>
 " Make hotkeys
-noremap <Leader>m :make<CR>
-noremap <Leader>r :make run<CR>
+"noremap <Leader>m :make<CR>
+"noremap <Leader>r :make run<CR>
 " Delete trailing whitespace
 nmap <leader>` :call DeleteTrailingWS()<cr>
 
 """""""""""""""""""""""""""""
 " => User interface
 """""""""""""""""""""""""""""
+set inccommand=split
 "  Set mouse mode
 set mouse=a
 
@@ -65,6 +69,9 @@ set incsearch
 
 " For regular expressions turn magic on
 set magic
+
+" Fix escape delay in normal vim
+set timeoutlen=1000 ttimeoutlen=0
 
 " Show matching brackets
 set showmatch
@@ -105,10 +112,11 @@ set display=lastline
 syntax enable
 
 " Set font if not in terminal
-set guifont=PragmataPro:h15
+set guifont=IosevkaTerm:h15
 
 " Color
 set t_Co=256
+set termguicolors
 
 " Set utf8 encoding
 set encoding=utf8
@@ -116,19 +124,6 @@ set encoding=utf8
 " Use unix as standard filetype
 set ffs=unix,dos,mac
 
-color blazer
-"color colorful
-"color solarized
-"color seoul
-"color grb256
-"color railscasts
-"color 256-jungle
-"color mustang
-"color wombat256i
-"color molokai
-"color gruvbox
-set background=dark
-"color Tomorrow
 
 """""""""""""""""""""""""""
 " => Text, tabs and indent
@@ -161,6 +156,7 @@ set viminfo^=%
 
 " Makes all copy and paste go to system clipboard
 set clipboard=unnamed
+
 
 """""""""""""""""""""""""""""
 " => Helper Functions
@@ -211,13 +207,17 @@ inoremap $t <><esc>i
 """"""""""""""""""""""""
 " => Movement
 """""""""""""""""""""""
-nmap J 5j
-nmap K 5k
-nmap H b
-nmap L w
+nmap } 5gj
+nmap { 5gk
 
-nmap <leader>; :!
-nmap ; :
+noremap <buffer> <silent> k gk
+noremap <buffer> <silent> j gj
+noremap <buffer> <silent> 0 g0
+noremap <buffer> <silent> $ g$
+
+nnoremap ; :
+nnoremap : ;
+
 
 " Mark keys
 nmap mm mM
