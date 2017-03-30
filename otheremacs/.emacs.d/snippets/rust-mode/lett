@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: let : type = 
-# key: lett
-# type: snippet
-# --
-let ${1:name}: ${2:type} = ${3:};

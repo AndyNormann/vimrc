@@ -16,11 +16,8 @@
   (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 ;;; Plugins
-  ;(load-theme 'base16-default-dark)
-  (load-theme 'gruvbox)
-
-  ;; (setq sml/theme 'respectful)
-  ;; (sml/setup)
+  ;(load-theme 'gruvbox)
+  (load-theme 'base16-onedark)
 
 
   ; Make sure we have use-package
@@ -97,7 +94,11 @@
   (use-package company :ensure t
     :config
     (global-company-mode)
-    (require 'company-simple-complete))
+    (require 'company-simple-complete)
+    (add-to-list 'company-backends '(company-irony-c-headers company-irony)))
+
+  (define-key company-active-map (kbd "<SPC>") nil)
+  (define-key company-active-map (kbd "<spc>") nil)
   
   (use-package smartparens-config 
     :config
@@ -114,13 +115,13 @@
     (blink-cursor-mode 0)
     (setq-default cursor-type 'box) 
 
-    (add-to-list 'default-frame-alist '(font . "Iosevka Term 17" ))
-    (set-face-attribute 'default t :font "Iosevka Term 17")
+    (add-to-list 'default-frame-alist '(font . "Fantasque Sans Mono 16" ))
+    (set-face-attribute 'default t :font "Fantasque Sans Mono 16")
 
     (if (display-graphic-p)
         (scroll-bar-mode -1))
-    (if (display-graphic-p)
-          (toggle-frame-fullscreen))
+    ;; (if (display-graphic-p)
+    ;;       (toggle-frame-fullscreen))
 
 
     (setq make-backup-files nil)
@@ -154,8 +155,6 @@
                    (format "cargo run")))))
 
 (add-hook 'c-mode-hook
-          (setq tab-width 4)
-          (setq c-basic-offset 4)
           (lambda ()
             (unless (file-exists-p "Makefile")
               (set (make-local-variable 'compile-command)
@@ -174,6 +173,9 @@
                              (file-name-sans-extension file)
                              file
                              (file-name-sans-extension file)))))))
+
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'c++-mode-hook 'irony-mode)
 
 (add-hook 'go-mode-hook '(lambda ()
             (setq tab-width 4)
@@ -202,6 +204,19 @@
                                     (evil-define-key 'motion compilation-mode-map "h" 'evil-backward-char)
                                     (evil-define-key 'motion compilation-mode-map "e" 'kill-compilation)
                                     ))
+
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
+
+(add-hook 'web-mode-hook
+          (lambda ()
+            (emmet-mode 1)))
+
+(add-hook 'html-mode-hook
+          (lambda ()
+            (define-key evil-normal-state-map (kbd "%") 'web-mode-tag-match)))
+
 
 (setenv "PATH" (concat (getenv "PATH") "~/Library/TexShop/bin/"))
 

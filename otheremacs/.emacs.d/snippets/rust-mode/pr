@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: println!()
-# key: pr
-# type: snippet
-# --
-println!("${1:}"${2:});${0:}

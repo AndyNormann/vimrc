@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: fn main() { … }
-# key: main
-# type: snippet
-# --
-pub fn main() {
-    ${0:}
-}
