@@ -4,11 +4,12 @@
 "  Plugin Stuff  "
 "                "
 """"""""""""""""""
+let mapleader = "\<Space>"
+let g:mapleader = "\<Space>"
 
 
 set nocompatible              " be iMproved, required
-filetype off                  " required
-
+filetype off                  " required 
 call plug#begin()
 
 Plug 'honza/vim-snippets'
@@ -20,23 +21,15 @@ Plug 'szw/vim-g'
 Plug 'Shougo/unite.vim'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdtree'
-Plug 'chriskempson/base16-vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'skywind3000/asyncrun.vim'
-Plug 'itchyny/lightline.vim'
-Plug 'cocopon/lightline-hybrid.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'ElmCast/elm-vim'
 Plug 'fatih/vim-go'
 Plug 'rust-lang/rust.vim'
 Plug 'rhysd/vim-clang-format'
-Plug 'morhetz/gruvbox'
-Plug 'cakebaker/scss-syntax.vim'
-Plug 'hail2u/vim-css3-syntax'
-Plug 'pangloss/vim-javascript'
+Plug 'w0ng/vim-hybrid'
 Plug 'mattn/emmet-vim'
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'letientai299/vim-react-snippets', { 'branch': 'es6' }
 
 call plug#end()
 
@@ -45,58 +38,6 @@ set noshowmode
 
 " Google things
 nmap <leader>g :Google <c-r>=expand("%:e")<cr> 
-
-set background=dark
-
-" Lightline
-let g:lightline = {
-            \ 'colorscheme': 'hybrid',
-            \ 'active': { 
-            \   'left': [ [ 'mode' ], [], ['filename', 'line', 'AsyncStatus'] ],
-            \   'right': []
-            \ },
-            \ 'inactive': {
-            \   'left': [['filename']],
-            \   'right': []
-            \ },
-            \ 'component_function': {
-            \   'filename': 'LightLineFilename',
-            \   'AsyncStatus': 'MyAsyncRunStatus',
-            \ }
-            \}
-
-
-
-let g:unite_force_overwrite_statusline = 0
-
-function! LightLineReadonly()
-    return &readonly ? '' : ''
-endfunction
-
-function! LightLineModified()
-    if &filetype == "help"
-        return ""
-    elseif &modified
-        return "+"
-    elseif &modifiable
-        return ""
-    else
-        return ""
-    endif
-endfunction
-
-function! LightLineFilename()
-    return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
-                \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
-                \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
-endfunction
-
-function! MyAsyncRunStatus()
-  return
-              \ g:asyncrun_status == 'success' ? "\u2714" : 
-              \ g:asyncrun_status == 'failure' ? "\u2718" :
-              \ "-"
-endfunction
 
 
 " Unite config
@@ -107,9 +48,9 @@ let g:unite_source_line_enable_highlight = 1
 let g:unite_force_overwrite_statusline = 0
 
 "" Unite binds
-noremap <leader>b :Unite buffer<cr>
-noremap <leader>f :Unite line -start-insert<cr>
-noremap <leader>e :Unite file<cr>
+nnoremap <leader>b :Unite buffer<cr>
+nnoremap <leader>f :Unite line -start-insert<cr>
+nnoremap <leader>e :Unite file<cr>
 
 let g:cpp_class_scope_highlight = 1
 
@@ -119,6 +60,9 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetsDir="~/.vim/snippets"
+
+" Emmet
+let g:user_emmet_expandabbr_key = '<C-j>'
 
 " AsyncRun
 noremap <silent><leader>o :call asyncrun#quickfix_toggle(10)<cr>
@@ -151,28 +95,6 @@ let g:elm_format_fail_silently = 1
 let g:elm_detailed_complete = 1
 let g:elm_setup_keybindings = 0
 
-"color blazer
-"color colorful
-"color solarized
-"color seoul
-"color grb256
-"color railscasts
-"color 256-jungle
-"color mustang
-"color wombat256i
-"color molokai
-let g:gruvbox_contrast_dark = 'hard'
-color gruvbox
-"color hybrid
-"color sourcerer
-"color base16-eighties
-"color base16-default-dark
-"color base16-onedark
-"color smyck
-"color lxvc
-"color Tomorrow
-"color Tomorrow-Night-Eighties
-"color Tomorrow-Night-Bright
 
 
 """""""""""""""""
@@ -194,8 +116,6 @@ filetype indent on
 " Set to auto read when a file is changed from the outside
 set autoread
 
-let mapleader = "\<Space>"
-let g:mapleader = "\<Space>"
 
 """"""""""""""""""""""""""
 " => Leader hotkeys
@@ -292,6 +212,8 @@ set encoding=utf8
 
 " Use unix as standard filetype
 set ffs=unix,dos,mac
+set background=dark
+color hybrid
 
 
 """""""""""""""""""""""""""
@@ -326,17 +248,6 @@ set viminfo^=%
 " Makes all copy and paste go to system clipboard
 set clipboard=unnamed
 
-
-"""""""""""""""""""""""""""""
-" => Helper Functions
-""""""""""""""""""""""""""""
-" Deletes trailing whitespace
-func! DeleteTrailingWS()
-    exe "normal mz"
-    %s/\s\+$//ge
-    exe "normal `z"
-endfunc
-
 """"""""""""""""""""""""""""
 " => Templates
 """"""""""""""""""""""""""""
@@ -364,7 +275,6 @@ endtry
 """"""""""""""""""""""""""
 " => Parenthesis/bracket
 """"""""""""""""""""""""""
-" Map auto complete of (, ", ', [
 inoremap $1 ()<esc>i
 inoremap $2 []<esc>i
 inoremap $3 {}<esc>i
@@ -444,5 +354,61 @@ au FileType rust inoremap ., ::
 au FileType rust nnoremap <Leader>c :AsyncRun cargo build
 au FileType rust nnoremap <Leader>t :AsyncRun cargo run
 
-
+"""""""""
+"  Web  "
+"""""""""
 au BufRead,BufNewFile *.hbs setfiletype html
+
+
+"""""""""""""""
+"  Statusline "
+"""""""""""""""
+
+let g:currentmode={
+            \ 'n'  : 'N ',
+            \ 'no' : 'OP ',
+            \ 'v'  : 'V ',
+            \ 'V'  : 'V-L ',
+            \ '' : 'V-B ',
+            \ 's'  : 'Select ',
+            \ 'S'  : 'S-Line ',
+            \ '' : 'S-Block ',
+            \ 'i'  : 'I ',
+            \ 'R'  : 'R ',
+            \ 'Rv' : 'V·Replace ',
+            \ 'c'  : 'Command ',
+            \ 'cv' : 'Vim Ex ',
+            \ 'ce' : 'Ex ',
+            \ 'r'  : 'Prompt ',
+            \ 'rm' : 'More ',
+            \ 'r?' : 'Confirm ',
+            \ '!'  : 'Shell ',
+            \ 't'  : 'Terminal '
+            \}
+
+
+function! ReadOnly()
+    if &readonly || !&modifiable
+        return ''
+    else
+        return ''
+    endif
+endfunction
+
+function! MyAsyncRunStatus()
+    return
+                \ g:asyncrun_status == 'success' ? "\u002b" : 
+                \ g:asyncrun_status == 'failure' ? "\u00d7" :
+                \ "\u2010"
+endfunction
+
+
+set laststatus=2
+set statusline=
+set statusline+=%0*\ %{g:currentmode[mode()]}             " Current mode
+set statusline+=%8*\ %l\                                  " Rownumber/total (%)
+set statusline+=%{MyAsyncRunStatus()}                     " AsyncRun status
+set statusline+=%8*\ %<%f\ %{ReadOnly()}\ %m\ %w\         " File+path
+
+hi StatusLineNC guifg=#707880 guibg=#1a1d10 gui=none cterm=none 
+
