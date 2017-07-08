@@ -14,45 +14,33 @@ call plug#begin()
 
 Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips'
-Plug 'rking/ag.vim'
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'szw/vim-g'
-Plug 'Shougo/unite.vim'
+Plug 'Shougo/denite.nvim'
 Plug 'tpope/vim-surround'
-Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'Raimondi/delimitMate'
-Plug 'ElmCast/elm-vim'
-Plug 'fatih/vim-go'
-Plug 'rust-lang/rust.vim'
-Plug 'rhysd/vim-clang-format'
+Plug 'sheerun/vim-polyglot'
 Plug 'w0ng/vim-hybrid'
-Plug 'mattn/emmet-vim'
+Plug 'tpope/vim-fugitive'
+Plug 'morhetz/gruvbox'
 
 call plug#end()
 
-" Removes the --insert-- and so on
-set noshowmode
+let g:gruvbox_contrast_dark = 'hard'
 
-" Google things
-nmap <leader>g :Google <c-r>=expand("%:e")<cr> 
+" Denite config
+call denite#custom#var('grep', 'command', ['rg'])
+call denite#custom#var('grep', 'default_opts',
+            \ ['--vimgrep', '--no-heading'])
+call denite#custom#var('grep', 'recursive_opts', [])
+call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+call denite#custom#var('grep', 'separator', ['--'])
+call denite#custom#var('grep', 'final_opts', [])
 
-
-" Unite config
-let g:unite_split_rule = "botright"
-let g:unite_enable_short_source_names = 1
-let g:unite_source_grep_command = 'rg' 
-let g:unite_source_line_enable_highlight = 1
-let g:unite_force_overwrite_statusline = 0
-
-"" Unite binds
-nnoremap <leader>b :Unite buffer<cr>
-nnoremap <leader>f :Unite line -start-insert<cr>
-nnoremap <leader>e :Unite file<cr>
-
-let g:cpp_class_scope_highlight = 1
+" Denite binds
+nnoremap <leader>b :Denite buffer -mode=normal<cr>
+nnoremap <leader>f :Denite line auto-highlight<cr>
+nnoremap <leader>e :Denite file_rec -mode=normal<cr>
 
 " Ultisnips
 inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -69,19 +57,14 @@ noremap <silent><leader>o :call asyncrun#quickfix_toggle(10)<cr>
 noremap <leader>m :AsyncRun <Up>
 noremap <leader>r :AsyncRun 
 
+" Fugitive
+nnoremap <leader>g :Gstatus<cr>
+
 " GoMode stuff
 let g:go_fmt_autosave = 1
 let g:go_fmt_fail_silently = 1
-let g:go_metalinter_autosave = 1
-
-" C stuff
-let g:clang_format#code_style = 'WebKit'
-let g:deoplete#sources#clang#libclang_path = '/usr/local/Cellar/llvm/3.9.1/lib/libclang.dylib'
-let g:deoplete#sources#clang#clang_header = '/usr/local/Cellar/llvm/3.9.1/lib/clang'
 
 " Rust stuff
-let g:deoplete#sources#rust#racer_binary='/Users/andreasnormann/.cargo/bin/racer'
-let g:deoplete#sources#rust#rust_source_path='/Users/andreasnormann/.scripts/rust/src'
 let g:ycm_rust_src_path = "/Users/andreasnormann/.scripts/rust/src"
 let g:rustc_path = "/Users/andreasnormann/.cargo/bin/rustc"
 let g:rustfmt_autosave = 1
@@ -89,12 +72,9 @@ let g:rustfmt_fail_silently = 1
 
 " Elm 
 let g:elm_make_output_file = "main.js"
-let g:elm_jump_to_error = 1
 let g:elm_format_autosave = 1
 let g:elm_format_fail_silently = 1
-let g:elm_detailed_complete = 1
 let g:elm_setup_keybindings = 0
-
 
 
 """""""""""""""""
@@ -115,7 +95,6 @@ filetype indent on
 
 " Set to auto read when a file is changed from the outside
 set autoread
-
 
 """"""""""""""""""""""""""
 " => Leader hotkeys
@@ -213,8 +192,8 @@ set encoding=utf8
 " Use unix as standard filetype
 set ffs=unix,dos,mac
 set background=dark
-color hybrid
-
+"color hybrid
+color gruvbox
 
 """""""""""""""""""""""""""
 " => Text, tabs and indent
@@ -272,23 +251,9 @@ try
 catch
 endtry
 
-""""""""""""""""""""""""""
-" => Parenthesis/bracket
-""""""""""""""""""""""""""
-inoremap $1 ()<esc>i
-inoremap $2 []<esc>i
-inoremap $3 {}<esc>i
-inoremap $4 {<esc>o}<esc>O
-inoremap $q ''<esc>i
-inoremap $e ""<esc>i
-inoremap $t <><esc>i
-
 """"""""""""""""""""""""
 " => Movement
 """""""""""""""""""""""
-nmap } 5gj
-nmap { 5gk
-
 noremap <buffer> <silent> k gk
 noremap <buffer> <silent> j gj
 noremap <buffer> <silent> 0 g0
@@ -354,27 +319,25 @@ au FileType rust inoremap ., ::
 au FileType rust nnoremap <Leader>c :AsyncRun cargo build
 au FileType rust nnoremap <Leader>t :AsyncRun cargo run
 
-"""""""""
-"  Web  "
-"""""""""
-au BufRead,BufNewFile *.hbs setfiletype html
 
 
-"""""""""""""""
-"  Statusline "
-"""""""""""""""
+""""""""""""""""
+"              "
+"  Statusline  "
+"              "
+""""""""""""""""
 
 let g:currentmode={
-            \ 'n'  : 'N ',
-            \ 'no' : 'OP ',
-            \ 'v'  : 'V ',
-            \ 'V'  : 'V-L ',
-            \ '' : 'V-B ',
+            \ 'n'  : 'NORMAL ',
+            \ 'no' : 'OPERATOR ',
+            \ 'v'  : 'VISUAL ',
+            \ 'V'  : 'VISUAL-L ',
+            \ '' : 'VISUAL-B ',
             \ 's'  : 'Select ',
             \ 'S'  : 'S-Line ',
             \ '' : 'S-Block ',
-            \ 'i'  : 'I ',
-            \ 'R'  : 'R ',
+            \ 'i'  : 'INSERT ',
+            \ 'R'  : 'REPLACE ',
             \ 'Rv' : 'V·Replace ',
             \ 'c'  : 'Command ',
             \ 'cv' : 'Vim Ex ',
@@ -385,7 +348,6 @@ let g:currentmode={
             \ '!'  : 'Shell ',
             \ 't'  : 'Terminal '
             \}
-
 
 function! ReadOnly()
     if &readonly || !&modifiable
@@ -402,7 +364,6 @@ function! MyAsyncRunStatus()
                 \ "\u2010"
 endfunction
 
-
 set laststatus=2
 set statusline=
 set statusline+=%0*\ %{g:currentmode[mode()]}             " Current mode
@@ -410,5 +371,7 @@ set statusline+=%8*\ %l\                                  " Rownumber/total (%)
 set statusline+=%{MyAsyncRunStatus()}                     " AsyncRun status
 set statusline+=%8*\ %<%f\ %{ReadOnly()}\ %m\ %w\         " File+path
 
-hi StatusLineNC guifg=#707880 guibg=#1a1d10 gui=none cterm=none 
+"hi StatusLineNC guifg=#707880 guibg=#1a1d10 gui=none cterm=none 
+hi StatusLine guifg=#282828 guibg=#ebdbb2 gui=none cterm=none 
 
+set noshowmode
