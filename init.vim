@@ -1,4 +1,3 @@
-
 """"""""""""""""""
 "                "
 "  Plugin Stuff  "
@@ -40,7 +39,7 @@ call denite#custom#var('grep', 'final_opts', [])
 " Denite binds
 nnoremap <leader>b :Denite buffer -mode=normal<cr>
 nnoremap <leader>f :Denite line auto-highlight<cr>
-nnoremap <leader>e :Denite file_rec -mode=normal<cr>
+nnoremap <leader>e :e .<cr>
 
 " Ultisnips
 inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -48,9 +47,6 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetsDir="~/.vim/snippets"
-
-" Emmet
-let g:user_emmet_expandabbr_key = '<C-j>'
 
 " AsyncRun
 noremap <silent><leader>o :call asyncrun#quickfix_toggle(10)<cr>
@@ -261,6 +257,9 @@ noremap <buffer> <silent> $ g$
 
 nnoremap ; :
 nnoremap : ;
+
+noremap <C-u> 7<C-u>
+noremap <C-d> 7<C-d>
 
 
 """"""""""""""""""""
