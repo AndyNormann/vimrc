@@ -6,40 +6,47 @@
 let mapleader = "\<Space>"
 let g:mapleader = "\<Space>"
 
-
 set nocompatible              " be iMproved, required
 filetype off                  " required 
 call plug#begin()
 
 Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips'
-Plug 'Shougo/denite.nvim'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdcommenter'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'sheerun/vim-polyglot'
 Plug 'w0ng/vim-hybrid'
+Plug 'arcticicestudio/nord-vim'
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'epilande/vim-react-snippets'
 Plug 'tpope/vim-fugitive'
 Plug 'morhetz/gruvbox'
+Plug 'prettier/vim-prettier', { 
+	\ 'do': 'yarn install', 
+	\ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql'] } 
+
 
 call plug#end()
 
 let g:gruvbox_contrast_dark = 'hard'
 
-" Denite config
-call denite#custom#var('grep', 'command', ['rg'])
-call denite#custom#var('grep', 'default_opts',
-            \ ['--vimgrep', '--no-heading'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
+" FZF 
+nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>f :Ag<cr>
+nnoremap <leader>e :Files<cr>
+nnoremap <leader>l :Marks<cr>
 
-" Denite binds
-nnoremap <leader>b :Denite buffer -mode=normal<cr>
-nnoremap <leader>f :Denite line auto-highlight<cr>
-nnoremap <leader>e :e .<cr>
+
+command! -bang -nargs=* Rg
+            \ call fzf#vim#grep(
+            \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+            \   <bang>0 ? fzf#vim#with_preview('up:60%')
+            \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+            \   <bang>0)
 
 " Ultisnips
 inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -47,6 +54,13 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetsDir="~/.vim/snippets"
+
+" Prettier
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.json,*.css,*.scss,*.less,*.graphql PrettierAsync
+
+" Align
+xmap ga <Plug>(EasyAlign)
 
 " AsyncRun
 noremap <silent><leader>o :call asyncrun#quickfix_toggle(10)<cr>
@@ -190,6 +204,7 @@ set ffs=unix,dos,mac
 set background=dark
 "color hybrid
 color gruvbox
+"color nord
 
 """""""""""""""""""""""""""
 " => Text, tabs and indent
@@ -258,8 +273,8 @@ noremap <buffer> <silent> $ g$
 nnoremap ; :
 nnoremap : ;
 
-noremap <C-u> 7<C-u>
-noremap <C-d> 7<C-d>
+noremap { 7gk
+noremap } 7gj
 
 
 """"""""""""""""""""
@@ -370,7 +385,10 @@ set statusline+=%8*\ %l\                                  " Rownumber/total (%)
 set statusline+=%{MyAsyncRunStatus()}                     " AsyncRun status
 set statusline+=%8*\ %<%f\ %{ReadOnly()}\ %m\ %w\         " File+path
 
-"hi StatusLineNC guifg=#707880 guibg=#1a1d10 gui=none cterm=none 
-hi StatusLine guifg=#282828 guibg=#ebdbb2 gui=none cterm=none 
+hi StatusLineNC guifg=#707880 guibg=#1a1d10 gui=none cterm=none 
+"hi StatusLine guifg=#282828 guibg=#ebdbb2 gui=none cterm=none 
+"hi StatusLine guifg=#282828 guibg=#81a1c1 gui=none cterm=none 
+
+
 
 set noshowmode
