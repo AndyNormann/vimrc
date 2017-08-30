@@ -28,5 +28,5 @@ color="#8ac6f2"
 
 # print out the results
 #echo  $SSID $rounded% 
-echo '<span background="'$color'" foreground="#000000">'  $SSID $rounded%'</span>'
+echo '<span foreground="#ffffff">'  $SSID $rounded%'</span>'
 #"#FC8366"

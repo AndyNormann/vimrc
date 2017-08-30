@@ -9,7 +9,7 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
-set $mod Mod1
+set $mod Mod4
 #set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -18,7 +18,9 @@ set $mod Mod1
 #font xft:PragmataPro for Powerline 18, Awesome 18
 #font xft:PragmataPro for Powerline 24, Awesome 24
 #font xft:System San Francisco Display Regular 27, Awesome 27
-font xft:System San Francisco Display Regular 24, Awesome 24
+#font xft:System San Francisco Display Regular 12, Awesome 12
+#font xft:Iosevka 14, Awesome 14
+font xft:Iosevka 23, Awesome 23
 #font xft:System San Francisco Display Regular 26, Awesome 26
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
@@ -36,10 +38,11 @@ font xft:System San Francisco Display Regular 24, Awesome 24
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec termite #termite -e tmux attach || tmux new-session termite urxvt
-#bindsym $mod+Shift+Return exec google-chrome-stable --force-device-scale-factor=2
-bindsym $mod+Shift+Return exec chromium-browser --force-device-scale-factor=2
-bindsym $mod+Shift+m exec spotify --force-device-scale-factor=2
+bindsym $mod+Return exec termite
+#bindsym $mod+Shift+Return exec google-chrome-stable 
+bindsym $mod+Shift+Return exec chromium --force-device-scale-factor=1.5
+bindsym $mod+Shift+c exec code --force-device-scale-factor=1.5
+bindsym $mod+Shift+m exec spotify --force-device-scale-factor=1.5
 bindsym $mod+Control+l exec ~/.config/i3/scripts/lock.sh ~/Pictures/lock.png
 
 
@@ -53,7 +56,13 @@ bindsym $mod+Shift+q kill
 #bindsym $mod+space exec j4-dmenu-desktop --dmenu='dmenu' 
 #bindsym $mod+space exec rofi -show -dmenu
 #bindsym $mod+space exec --no-startup-id j4-dmenu-desktop --dmenu='rofi -i -dmenu -font "System San Francisco Regular 24" -bg "#222222" -fg "#888888" -hlbg "#285577" -hlfg "#ffffff" -opacity 90 -m 0 -location 2'
-bindsym $mod+space exec j4-dmenu-desktop --dmenu="rofi -width 30 -i -dmenu -p '' -lines 7 -separator-style none -hide-scrollbar -eh 2 -padding 20 -bw 0 -bc '#2f343f' -bg '#2f343f' -fg '#f3f4f5' -hlbg '#2f343f' -hlfg '#cf6a4c' -font 'System San Francisco Display 14'" 
+
+#bindsym $mod+space exec j4-dmenu-desktop --dmenu='rofi -width 30 -i -dmenu -p "" -lines 7 -separator-style none -hide-scrollbar -eh 2 -padding 20 -bw 0 -color-normal "#1e2027,#9ba2b1,#1e2027,#586e75,#eee8d5" -color-window "#1e2027,#9ba2b1"' 
+
+bindsym $mod+space exec j4-dmenu-desktop --dmenu='rofi -width 30 -i -dmenu -p "" -lines 7 -separator-style none -hide-scrollbar -eh 2 -padding 20 -bw 0' 
+
+# Light theme for rofi
+#bindsym $mod+space exec j4-dmenu-desktop --dmenu="rofi -width 30 -i -dmenu -p '' -lines 7 -separator-style none -hide-scrollbar -eh 2 -padding 20 -bw 0 -bc '#2f343f' -bg '#2f343f' -fg '#f3f4f5' -hlbg '#2f343f' -hlfg '#cf6a4c' -font 'System San Francisco Display 14'" 
 
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
@@ -119,33 +128,36 @@ bindsym $mod+a focus parent
 
 set $WS1 workspace 1:  
 set $WS2 workspace 2: 
+set $WS3 workspace 3: 
+set $WS0 workspace 10: 
+set $WS9 workspace 9: 
 
 # switch to workspace
 bindsym $mod+1 $WS1
 bindsym $mod+2 $WS2
-bindsym $mod+3 workspace 3: 
-bindsym $mod+4 workspace 4: 
-bindsym $mod+5 workspace 5: 
-bindsym $mod+6 workspace 6: 
-bindsym $mod+7 workspace 7: 
-bindsym $mod+8 workspace 8: 
-bindsym $mod+9 workspace 9: 
-bindsym $mod+0 workspace 10: 
+bindsym $mod+3 $WS3
+bindsym $mod+4 workspace 4: 
+bindsym $mod+5 workspace 5: 
+bindsym $mod+6 workspace 6: 
+bindsym $mod+7 workspace 7: 
+bindsym $mod+8 workspace 8: 
+bindsym $mod+9 $WS9
+bindsym $mod+0 $WS0
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to $WS1
 bindsym $mod+Shift+2 move container to $WS2
-bindsym $mod+Shift+3 move container to workspace 3: 
-bindsym $mod+Shift+4 move container to workspace 4: 
-bindsym $mod+Shift+5 move container to workspace 5: 
-bindsym $mod+Shift+6 move container to workspace 6: 
-bindsym $mod+Shift+7 move container to workspace 7: 
-bindsym $mod+Shift+8 move container to workspace 8: 
-bindsym $mod+Shift+9 move container to workspace 9: 
-bindsym $mod+Shift+0 move container to workspace 10: 
+bindsym $mod+Shift+3 move container to $WS3
+bindsym $mod+Shift+4 move container to workspace 4: 
+bindsym $mod+Shift+5 move container to workspace 5: 
+bindsym $mod+Shift+6 move container to workspace 6: 
+bindsym $mod+Shift+7 move container to workspace 7: 
+bindsym $mod+Shift+8 move container to workspace 8: 
+bindsym $mod+Shift+9 move container to $WS9
+bindsym $mod+Shift+0 move container to $WS0
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+#bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
@@ -183,22 +195,31 @@ bindsym $mod+r mode "resize"
 set $unfocused  "#3D4341"
 set $white  "#000000"
 #set $bg     "#000026"
-set $bg     "#111213"
-set $lime   "#FFFFFF"
+#set $bg     "#111213"
+#set $lime   "#FFFFFF"
 #set $lime   "#8ac6f2"
 
-set $red    "#DA3E63"
+# Firewatch colors
+#set $bg "#1e2027"
+#set $lime "#9ba2b1"
+
+set $bg "#282c34"
+set $lime "#9ba2b1"
+set $fg "#dcdfe4"
+
+set $red "#DA3E63"
 
 bar {
         status_command i3blocks -c ~/.config/i3/i3blocks.conf
         tray_padding 0
-        #mode hide
-        #modifier Mod4
+        mode hide
+        modifier Mod1
+        #modifier Mod1
         colors {
                 background          $bg
                 focused_workspace   $bg $lime $bg
                 active_workspace    $bg $bg   #FFFFFF
-                inactive_workspace  $bg $bg   $lime
+                inactive_workspace  $bg $bg   $fg
 
         }
 }
@@ -206,23 +227,24 @@ bar {
 new_window none
 #exec --no-startup-id feh --bg-scale ~/Pictures/bg.png
 #exec --no-startup-id feh --bg-scale ~/Pictures/doge.jpg
-exec export GDK_SCALE=2
+#exec export GDK_SCALE=2
 
-exec --no-startup-id i3-msg '$WS2; exec termite;$WS1; exec chromium-browser --force-device-scale-factor=2';
+exec --no-startup-id i3-msg '$WS2; exec termite;$WS1; exec chromium --force-device-scale-factor=1.5';
 
-exec --no-startup-id nm-applet
-exec --no-startup-id pasystray
+#exec --no-startup-id nm-applet
+#exec --no-startup-id pasystray
 
 exec --no-startup-id setxkbmap -model pc105 -layout us -option compose:ralt -option grp:ctrl_alt_toggle -option ctrl:nocaps
+exec --no-startup-id xset r rate 250 35
 
 #exec xcape -e 'Control_L=Escape'
 
-exec --no-startup-id dunst
-
-exec --no-startup-id feh --bg-fill ~/Pictures/4kmountain.jpg
+#exec --no-startup-id dunst
+exec --no-startup-id feh --bg-fill ~/Pictures/bigfirewatch.jpg
 
 #exec --no-startup-id onboard
-exec --no-startup-id pm-powersave true
+#exec --no-startup-id pm-powersave true
 exec --no-startup-id xset s off -dpms
+exec --no-startup-id compton -b -CG -D 0
 #exec touchegg
 

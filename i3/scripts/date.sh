@@ -7,5 +7,5 @@ time=$(date '+%H:%M')
 
 
 #echo '<span background="#8ac6f2" foreground="#000000">'  $dayname $day $time '</span>'
-echo '<span background="#000000" foreground="#FFFFFF">'   $day $datenum $time'</span>'
+echo '<span foreground="#FFFFFF">'   $day $datenum $time'</span>'
 #echo '<span background="#FF414D" foreground="#000000">'  $dayname $day $time '</span>'
