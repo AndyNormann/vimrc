@@ -17,14 +17,18 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'sheerun/vim-polyglot'
-Plug 'w0ng/vim-hybrid'
-Plug 'arcticicestudio/nord-vim'
-Plug '/usr/local/opt/fzf'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-go', { 'do': 'make'}
+Plug 'carlitux/deoplete-ternjs'
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'junegunn/vim-easy-align'
 Plug 'epilande/vim-react-snippets'
+Plug 'mattn/emmet-vim'
 Plug 'tpope/vim-fugitive'
-Plug 'morhetz/gruvbox'
+Plug 'sbdchd/neoformat'
+Plug 'fatih/vim-go'
 Plug 'prettier/vim-prettier', { 
 	\ 'do': 'yarn install', 
 	\ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql'] } 
@@ -36,7 +40,7 @@ let g:gruvbox_contrast_dark = 'hard'
 
 " FZF 
 nnoremap <leader>b :Buffers<cr>
-nnoremap <leader>f :Ag<cr>
+nnoremap <leader>f :Rg<cr>
 nnoremap <leader>e :Files<cr>
 nnoremap <leader>l :Marks<cr>
 
@@ -55,9 +59,15 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetsDir="~/.vim/snippets"
 
+" Deoplete
+let g:deoplete#enable_at_startup = 1
+set completeopt-=preview
+
+
 " Prettier
-let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.json,*.css,*.scss,*.less,*.graphql PrettierAsync
+autocmd BufWritePre *.js,*.json,*.css,*scss,*.less,*.graphql Neoformat
+let g:neoformat_enabled_javascript = ['prettier']
+
 
 " Align
 xmap ga <Plug>(EasyAlign)
@@ -121,6 +131,9 @@ noremap <silent> <leader><cr> :noh<cr>
 set inccommand=split
 "  Set mouse mode
 set mouse=a
+
+" Disable startup screen
+set shortmess=I
 
 " Turn on wild menu
 set wildmenu
@@ -203,8 +216,8 @@ set encoding=utf8
 set ffs=unix,dos,mac
 set background=dark
 "color hybrid
-color gruvbox
-"color nord
+"color hybrid_material
+color onehalfdark
 
 """""""""""""""""""""""""""
 " => Text, tabs and indent
@@ -236,7 +249,7 @@ autocmd BufReadPost *
 set viminfo^=%
 
 " Makes all copy and paste go to system clipboard
-set clipboard=unnamed
+set clipboard=unnamedplus
 
 """"""""""""""""""""""""""""
 " => Templates
@@ -385,10 +398,24 @@ set statusline+=%8*\ %l\                                  " Rownumber/total (%)
 set statusline+=%{MyAsyncRunStatus()}                     " AsyncRun status
 set statusline+=%8*\ %<%f\ %{ReadOnly()}\ %m\ %w\         " File+path
 
-hi StatusLineNC guifg=#707880 guibg=#1a1d10 gui=none cterm=none 
+"hi StatusLineNC guifg=#707880 guibg=#1a1d10 gui=none cterm=none 
 "hi StatusLine guifg=#282828 guibg=#ebdbb2 gui=none cterm=none 
-"hi StatusLine guifg=#282828 guibg=#81a1c1 gui=none cterm=none 
+"hi StatusLine guifg=#282828 guibg=#a5acbd gui=none cterm=none 
+hi StatusLine guifg=#141414 guibg=#61afef gui=none cterm=none 
 
+" Remove the tilde on empty lines
+hi! EndOfBuffer ctermbg=bg ctermfg=bg guibg=bg guifg=bg
+
+
+" Statusline for fzf
+function! s:fzf_statusline()
+  " Override statusline as you like
+  highlight fzf1 ctermfg=161 ctermbg=251
+  highlight fzf2 ctermfg=23 ctermbg=251
+  highlight fzf3 ctermfg=237 ctermbg=251
+  setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+endfunction
+autocmd! User FzfStatusLine call <SID>fzf_statusline()
 
 
 set noshowmode
