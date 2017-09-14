@@ -1,0 +1,20 @@
+{
+  "name": "onehalfdark",
+  "displayName": "OneHalfDark",
+  "description": "OneHalfDark theme ported to vscode",
+  "version": "0.0.1",
+  "publisher": "kalsjdalksjf",
+  "engines": {
+    "vscode": "^1.16.0"
+  },
+  "categories": ["Themes"],
+  "contributes": {
+    "themes": [
+      {
+        "label": "OneHalfDark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/OneHalfDark-color-theme.json"
+      }
+    ]
+  }
+}

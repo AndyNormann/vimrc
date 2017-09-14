@@ -2,7 +2,7 @@
 #font = PragmataPro 16
 #font = Hack 16
 #font = PragmataPro for Powerline 14
-font = PragmataPro for Powerline 27
+font = Iosevka 27
 #font = PragmataPro for Powerline 22
 allow_bold       = true
 allow_italic     = true
