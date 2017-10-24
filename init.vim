@@ -8,41 +8,69 @@ let g:mapleader = "\<Space>"
 
 set nocompatible              " be iMproved, required
 filetype off                  " required 
-call plug#begin()
 
-Plug 'honza/vim-snippets'
-Plug 'SirVer/ultisnips'
-Plug 'tpope/vim-surround'
-Plug 'scrooloose/nerdcommenter'
-Plug 'skywind3000/asyncrun.vim'
-Plug 'Raimondi/delimitMate'
-Plug 'sheerun/vim-polyglot'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-go', { 'do': 'make'}
-Plug 'carlitux/deoplete-ternjs'
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
-Plug 'junegunn/vim-easy-align'
-Plug 'epilande/vim-react-snippets'
-Plug 'mattn/emmet-vim'
-Plug 'tpope/vim-fugitive'
-Plug 'sbdchd/neoformat'
-Plug 'fatih/vim-go'
-Plug 'prettier/vim-prettier', { 
-	\ 'do': 'yarn install', 
-	\ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql'] } 
+set runtimepath+=~/.config/nvim/repos/github.com/Shougo/dein.vim
 
+call dein#begin('~/.config/nvim')
 
-call plug#end()
+call dein#add('Shougo/dein.vim')
+call dein#add('sonph/onehalf', {'rtp': 'vim'})
+call dein#add('junegunn/fzf', { 'build': './install', 'merged': 0 })
+call dein#add('junegunn/fzf.vim')
+call dein#add('honza/vim-snippets')
+call dein#add('SirVer/ultisnips')
+call dein#add('tpope/vim-surround')
+call dein#add('scrooloose/nerdcommenter')
+call dein#add('skywind3000/asyncrun.vim')
+call dein#add('Raimondi/delimitMate')
+call dein#add('sheerun/vim-polyglot')
+call dein#add('honza/vim-snippets')
+call dein#add('ElmCast/elm-vim')
+call dein#add('tpope/vim-vinegar')
+call dein#add('Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'})
+call dein#add('zchee/deoplete-go', {'do': 'make'})
+call dein#add('epilande/vim-react-snippets')
+call dein#add('mattn/emmet-vim')
+call dein#add('tpope/vim-fugitive')
+call dein#add('itchyny/lightline.vim')
+call dein#add('sbdchd/neoformat')
+call dein#add('fatih/vim-go')
+call dein#add('prettier/vim-prettier', {'do': 'yarn install', 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql']})
 
-let g:gruvbox_contrast_dark = 'hard'
+call dein#end()
 
 " FZF 
 nnoremap <leader>b :Buffers<cr>
 nnoremap <leader>f :Rg<cr>
 nnoremap <leader>e :Files<cr>
 nnoremap <leader>l :Marks<cr>
+
+let g:fzf_colors =
+            \ { 
+            \ 'fg':      ['fg', 'Normal'],
+            \ 'bg':      ['bg', 'Normal'],
+            \ 'hl':      ['fg', 'Comment'],
+            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+            \ 'hl+':     ['fg', 'Statement'],
+            \ 'info':    ['fg', 'PreProc'],
+            \ 'border':  ['fg', 'Ignore'],
+            \ 'prompt':  ['fg', 'Conditional'],
+            \ 'pointer': ['fg', 'Exception'],
+            \ 'marker':  ['fg', 'Keyword'],
+            \ 'spinner': ['fg', 'Label'],
+            \ 'header':  ['fg', 'Comment'] 
+            \ }
+
+function! s:fzf_statusline()
+    " Override statusline as you like
+    highlight fzf1 ctermfg=161 ctermbg=251
+    highlight fzf2 ctermfg=23 ctermbg=251
+    highlight fzf3 ctermfg=237 ctermbg=251
+    setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+endfunction
+
+autocmd! User FzfStatusLine call <SID>fzf_statusline()
 
 
 command! -bang -nargs=* Rg
@@ -59,6 +87,22 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetsDir="~/.vim/snippets"
 
+" Lightline
+let g:lightline = {
+            \ 'colorscheme': 'onehalfdark',
+            \ 'active': {
+            \   'left': [ [ 'mode' ], [ 'gitbranch' ], [ 'readonly', 'filename', 'modified', 'line' ] ],
+            \  'right': [[]],
+            \ },
+            \ 'inactive': {
+            \   'left': [ ['filename', 'readonly', 'modified', 'line'] ],
+            \   'right': [[]],
+            \ },
+            \ 'component_function': {
+            \   'gitbranch': 'fugitive#head'
+            \ }
+            \ }
+
 " Deoplete
 let g:deoplete#enable_at_startup = 1
 set completeopt-=preview
@@ -67,7 +111,7 @@ set completeopt-=preview
 " Prettier
 autocmd BufWritePre *.js,*.json,*.css,*scss,*.less,*.graphql Neoformat
 let g:neoformat_enabled_javascript = ['prettier']
-
+let g:neoformat_only_msg_on_error = 1
 
 " Align
 xmap ga <Plug>(EasyAlign)
@@ -215,9 +259,14 @@ set encoding=utf8
 " Use unix as standard filetype
 set ffs=unix,dos,mac
 set background=dark
-"color hybrid
-"color hybrid_material
 color onehalfdark
+
+
+highlight Comment gui=italic cterm=italic
+highlight htmlArg gui=italic cterm=italic
+highlight Special gui=italic cterm=italic
+
+
 
 """""""""""""""""""""""""""
 " => Text, tabs and indent
@@ -347,75 +396,7 @@ au FileType rust nnoremap <Leader>c :AsyncRun cargo build
 au FileType rust nnoremap <Leader>t :AsyncRun cargo run
 
 
-
-""""""""""""""""
-"              "
-"  Statusline  "
-"              "
-""""""""""""""""
-
-let g:currentmode={
-            \ 'n'  : 'NORMAL ',
-            \ 'no' : 'OPERATOR ',
-            \ 'v'  : 'VISUAL ',
-            \ 'V'  : 'VISUAL-L ',
-            \ '' : 'VISUAL-B ',
-            \ 's'  : 'Select ',
-            \ 'S'  : 'S-Line ',
-            \ '' : 'S-Block ',
-            \ 'i'  : 'INSERT ',
-            \ 'R'  : 'REPLACE ',
-            \ 'Rv' : 'V·Replace ',
-            \ 'c'  : 'Command ',
-            \ 'cv' : 'Vim Ex ',
-            \ 'ce' : 'Ex ',
-            \ 'r'  : 'Prompt ',
-            \ 'rm' : 'More ',
-            \ 'r?' : 'Confirm ',
-            \ '!'  : 'Shell ',
-            \ 't'  : 'Terminal '
-            \}
-
-function! ReadOnly()
-    if &readonly || !&modifiable
-        return ''
-    else
-        return ''
-    endif
-endfunction
-
-function! MyAsyncRunStatus()
-    return
-                \ g:asyncrun_status == 'success' ? "\u002b" : 
-                \ g:asyncrun_status == 'failure' ? "\u00d7" :
-                \ "\u2010"
-endfunction
-
-set laststatus=2
-set statusline=
-set statusline+=%0*\ %{g:currentmode[mode()]}             " Current mode
-set statusline+=%8*\ %l\                                  " Rownumber/total (%)
-set statusline+=%{MyAsyncRunStatus()}                     " AsyncRun status
-set statusline+=%8*\ %<%f\ %{ReadOnly()}\ %m\ %w\         " File+path
-
-"hi StatusLineNC guifg=#707880 guibg=#1a1d10 gui=none cterm=none 
-"hi StatusLine guifg=#282828 guibg=#ebdbb2 gui=none cterm=none 
-"hi StatusLine guifg=#282828 guibg=#a5acbd gui=none cterm=none 
-hi StatusLine guifg=#141414 guibg=#61afef gui=none cterm=none 
-
 " Remove the tilde on empty lines
 hi! EndOfBuffer ctermbg=bg ctermfg=bg guibg=bg guifg=bg
-
-
-" Statusline for fzf
-function! s:fzf_statusline()
-  " Override statusline as you like
-  highlight fzf1 ctermfg=161 ctermbg=251
-  highlight fzf2 ctermfg=23 ctermbg=251
-  highlight fzf3 ctermfg=237 ctermbg=251
-  setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-endfunction
-autocmd! User FzfStatusLine call <SID>fzf_statusline()
-
 
 set noshowmode
