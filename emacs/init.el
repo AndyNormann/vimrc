@@ -17,7 +17,7 @@
 
 ;;; Plugins
   ;(load-theme 'gruvbox)
-  (load-theme 'base16-onedark)
+  ;(load-theme 'base16-onedark)
 
 
   ; Make sure we have use-package
@@ -32,12 +32,15 @@
     :config
     (custom-powerline-evil-theme))
 
+  (use-package diminish :ensure t)
+
   (eval-after-load "company" '(diminish 'company-mode))
   (eval-after-load "smartparens" '(diminish 'smartparens-mode))
   (eval-after-load "ivy" '(diminish 'ivy-mode))
   (eval-after-load "yasnippet" '(diminish 'yas-minor-mode))
   (eval-after-load "Undo-Tree" '(diminish 'undo-tree-mode))
 
+  (use-package evil-leader :ensure t)
 
   (use-package evil :ensure t
     :config
@@ -100,9 +103,13 @@
   (define-key company-active-map (kbd "<SPC>") nil)
   (define-key company-active-map (kbd "<spc>") nil)
   
-  (use-package smartparens-config 
+    (use-package smartparens :ensure t)
+
+  (use-package smartparens-config
     :config
     (smartparens-global-mode))
+
+  (use-package xclip :ensure t)
 
 
 ;;; General settings
