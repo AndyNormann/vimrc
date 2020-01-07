@@ -15,27 +15,32 @@ call dein#begin('~/.config/nvim')
 
 call dein#add('Shougo/dein.vim')
 call dein#add('sonph/onehalf', {'rtp': 'vim'})
+call dein#add('kyoz/purify', {'rtp': 'vim'})
+call dein#add('chase/focuspoint-vim')
+call dein#add('AlessandroYorba/Alduin')
+call dein#add('ajmwagar/vim-deus')
+call dein#add('mhartington/oceanic-next')
+call dein#add('rakr/vim-two-firewatch')
 call dein#add('junegunn/fzf', { 'build': './install', 'merged': 0 })
 call dein#add('junegunn/fzf.vim')
+call dein#add('easymotion/vim-easymotion')
 call dein#add('honza/vim-snippets')
 call dein#add('SirVer/ultisnips')
 call dein#add('tpope/vim-surround')
-call dein#add('scrooloose/nerdcommenter')
-call dein#add('skywind3000/asyncrun.vim')
+call dein#add('junegunn/vim-easy-align')
+call dein#add('tpope/vim-commentary')
+call dein#add('kassio/neoterm')
 call dein#add('Raimondi/delimitMate')
 call dein#add('sheerun/vim-polyglot')
+call dein#add('evanleck/vim-svelte')
 call dein#add('honza/vim-snippets')
-call dein#add('ElmCast/elm-vim')
 call dein#add('tpope/vim-vinegar')
-call dein#add('Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'})
-call dein#add('zchee/deoplete-go', {'do': 'make'})
-call dein#add('epilande/vim-react-snippets')
 call dein#add('mattn/emmet-vim')
 call dein#add('tpope/vim-fugitive')
 call dein#add('itchyny/lightline.vim')
+call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
 call dein#add('sbdchd/neoformat')
-call dein#add('fatih/vim-go')
-call dein#add('prettier/vim-prettier', {'do': 'yarn install', 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql']})
+call dein#add('prettier/vim-prettier', {'do': 'yarn install', 'for': ['typescript', 'json', 'graphql']})
 
 call dein#end()
 
@@ -44,34 +49,6 @@ nnoremap <leader>b :Buffers<cr>
 nnoremap <leader>f :Rg<cr>
 nnoremap <leader>e :Files<cr>
 nnoremap <leader>l :Marks<cr>
-
-let g:fzf_colors =
-            \ { 
-            \ 'fg':      ['fg', 'Normal'],
-            \ 'bg':      ['bg', 'Normal'],
-            \ 'hl':      ['fg', 'Comment'],
-            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-            \ 'hl+':     ['fg', 'Statement'],
-            \ 'info':    ['fg', 'PreProc'],
-            \ 'border':  ['fg', 'Ignore'],
-            \ 'prompt':  ['fg', 'Conditional'],
-            \ 'pointer': ['fg', 'Exception'],
-            \ 'marker':  ['fg', 'Keyword'],
-            \ 'spinner': ['fg', 'Label'],
-            \ 'header':  ['fg', 'Comment'] 
-            \ }
-
-function! s:fzf_statusline()
-    " Override statusline as you like
-    highlight fzf1 ctermfg=161 ctermbg=251
-    highlight fzf2 ctermfg=23 ctermbg=251
-    highlight fzf3 ctermfg=237 ctermbg=251
-    setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-endfunction
-
-autocmd! User FzfStatusLine call <SID>fzf_statusline()
-
 
 command! -bang -nargs=* Rg
             \ call fzf#vim#grep(
@@ -85,13 +62,24 @@ inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-let g:UltiSnipsSnippetsDir="~/.vim/snippets"
+let g:UltiSnipsSnippetsDir="~/.config/nvim/snippets"
+
+" Easy align
+xmap ga <Plug>(EasyAlign)
+
+" Easymotion
+nmap <silent>f <Plug>(easymotion-jumptoanywhere)
+
+" Coc
+function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+endfunction
 
 " Lightline
 let g:lightline = {
-            \ 'colorscheme': 'onehalfdark',
+            \ 'colorscheme': 'purify',
             \ 'active': {
-            \   'left': [ [ 'mode' ], [ 'gitbranch' ], [ 'readonly', 'filename', 'modified', 'line' ] ],
+            \   'left': [ [ 'mode' ], [ 'gitbranch', 'cocstatus', 'currentfunction' ], [ 'readonly', 'filename', 'modified', 'line' ] ],
             \  'right': [[]],
             \ },
             \ 'inactive': {
@@ -99,27 +87,23 @@ let g:lightline = {
             \   'right': [[]],
             \ },
             \ 'component_function': {
+            \   'cocstatus': 'coc#status',
+            \   'currentfunction': 'CocCurrentFunction',
             \   'gitbranch': 'fugitive#head'
             \ }
             \ }
 
-" Deoplete
-let g:deoplete#enable_at_startup = 1
-set completeopt-=preview
 
 
 " Prettier
-autocmd BufWritePre *.js,*.json,*.css,*scss,*.less,*.graphql Neoformat
+autocmd BufWritePre *.json,*.graphql Neoformat
 let g:neoformat_enabled_javascript = ['prettier']
 let g:neoformat_only_msg_on_error = 1
 
+let g:neoformat_basic_format_align = 1
+
 " Align
 xmap ga <Plug>(EasyAlign)
-
-" AsyncRun
-noremap <silent><leader>o :call asyncrun#quickfix_toggle(10)<cr>
-noremap <leader>m :AsyncRun <Up>
-noremap <leader>r :AsyncRun 
 
 " Fugitive
 nnoremap <leader>g :Gstatus<cr>
@@ -127,18 +111,6 @@ nnoremap <leader>g :Gstatus<cr>
 " GoMode stuff
 let g:go_fmt_autosave = 1
 let g:go_fmt_fail_silently = 1
-
-" Rust stuff
-let g:ycm_rust_src_path = "/Users/andreasnormann/.scripts/rust/src"
-let g:rustc_path = "/Users/andreasnormann/.cargo/bin/rustc"
-let g:rustfmt_autosave = 1
-let g:rustfmt_fail_silently = 1
-
-" Elm 
-let g:elm_make_output_file = "main.js"
-let g:elm_format_autosave = 1
-let g:elm_format_fail_silently = 1
-let g:elm_setup_keybindings = 0
 
 
 """""""""""""""""
@@ -150,8 +122,13 @@ let g:elm_setup_keybindings = 0
 """""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""
+" Save
+nnoremap s :w<cr>
+nnoremap Q :qa<cr>
 " Sets how many lines vim will remember
 set history=700
+
+set guicursor=
 
 " Enable filetype plugins
 filetype plugin on
@@ -164,9 +141,6 @@ set autoread
 " => Leader hotkeys
 """""""""""""""""""""""""
 " Saving and quiting
-noremap <leader>w :w<cr>
-noremap <leader>q :bdelete<cr>
-
 noremap <silent> <leader><cr> :noh<cr>
 
 """""""""""""""""""""""""""""
@@ -223,10 +197,13 @@ set t_vb=
 set tm=500
 
 " Line numbers
-"set number
+set number
 
 " set 0 to jump to last non whitespace character
 map 0 ^
+
+nmap <silent> j gj
+nmap <silent> k gk
 
 " Show statusline
 set laststatus=2
@@ -258,15 +235,12 @@ set encoding=utf8
 
 " Use unix as standard filetype
 set ffs=unix,dos,mac
-set background=dark
+set background=light
 color onehalfdark
-
 
 highlight Comment gui=italic cterm=italic
 highlight htmlArg gui=italic cterm=italic
 highlight Special gui=italic cterm=italic
-
-
 
 """""""""""""""""""""""""""
 " => Text, tabs and indent
@@ -278,8 +252,8 @@ set expandtab
 set smarttab
 
 " Set tabwidth
-set shiftwidth=4
-set tabstop=4
+set shiftwidth=2
+set tabstop=2
 
 " Linebreak on 500 characters
 set lbr
@@ -349,13 +323,13 @@ noremap } 7gj
 " => Python
 """""""""""""""""""""""
 au FileType python nnoremap <leader>r :!python3 %<cr>
-au FileType python nnoremap <leader>t :!python3 % 
+" au FileType python nnoremap <leader>t :!python3 % 
 
 """""""""""""""""""""""
 " => Ruby
 """""""""""""""""""""""
 au FileType ruby nnoremap <leader>r :!ruby %<cr>
-au FileType ruby nnoremap <leader>t :!ruby % 
+" au FileType ruby nnoremap <leader>t :!ruby % 
 
 """""""""""""""""""""""
 " => Elm
@@ -365,14 +339,14 @@ au FileType elm nnoremap <leader>c :ElmMake<cr>
 """""""""""""""""""""""""""""
 " => C section
 """"""""""""""""""""""""""""""
-au FileType c nnoremap <Leader>t :!/tmp/./%< 
+" au FileType c nnoremap <Leader>t :!/tmp/./%< 
 au FileType c nnoremap <Leader>c :AsyncRun clang -Weverything -o /tmp/%:t:r %:t
-au FileType c inoremap <Leader>. ->
+au FileType c inoremap ,. ->
 
 """"""""""""""""""""""""""""
 " => Cpp section
 """""""""""""""""""""""""""""
-au FileType cpp nnoremap <Leader>t :!/tmp/%<
+" au FileType cpp nnoremap <Leader>t :!/tmp/%<
 au FileType cpp nnoremap <Leader>c :AsyncRun clang++ -Weverything -std=c++14 -o /tmp/%:t:r %
 au FileType cpp inoremap ,. ->
 au FileType cpp inoremap ., ::
@@ -387,6 +361,7 @@ au FileType java nnoremap <Leader>c :AsyncRun javac *.java
 " => Go section
 """""""""""""""""""""""""""""""
 au FileType go nnoremap <Leader>c :AsyncRun go run %
+au FileType go inoremap ,. :=
 
 """""""""""""""""""""""""""""
 " => Rust section
@@ -396,7 +371,24 @@ au FileType rust nnoremap <Leader>c :AsyncRun cargo build
 au FileType rust nnoremap <Leader>t :AsyncRun cargo run
 
 
-" Remove the tilde on empty lines
-hi! EndOfBuffer ctermbg=bg ctermfg=bg guibg=bg guifg=bg
+"""""""""""""""""""""""""""
+" => Onivim section
+"""""""""""""""""""""""""""
 
-set noshowmode
+if exists('g:gui_oni')
+  set noshowmode
+  set nonumber
+  set laststatus=0
+endif
+
+"""""""""""""""""""""""""""
+" => Term section
+"""""""""""""""""""""""""""
+tnoremap <esc><esc> <C-\><C-n>
+let g:neoterm_autoscroll=1
+let g:neoterm_default_mod='vertical rightbelow 35%'
+
+nnoremap <silent><leader>o :<c-u>exec v:count.'Ttoggle'<cr>
+nnoremap <leader>r :T 
+nnoremap <leader>t :Ttoggle<cr>
+nnoremap <leader>m :T <Up>
