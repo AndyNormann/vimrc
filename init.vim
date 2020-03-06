@@ -15,12 +15,16 @@ call dein#begin('~/.config/nvim')
 
 call dein#add('Shougo/dein.vim')
 call dein#add('sonph/onehalf', {'rtp': 'vim'})
-call dein#add('kyoz/purify', {'rtp': 'vim'})
-call dein#add('chase/focuspoint-vim')
-call dein#add('AlessandroYorba/Alduin')
-call dein#add('ajmwagar/vim-deus')
-call dein#add('mhartington/oceanic-next')
-call dein#add('rakr/vim-two-firewatch')
+call dein#add('taniarascia/new-moon.vim')
+call dein#add('challenger-deep-theme/vim')
+call dein#add('nightsense/snow')
+call dein#add('barlog-m/oceanic-primal-vim')
+call dein#add('andreypopp/vim-colors-plain')
+call dein#add('jaredgorski/fogbell.vim')
+call dein#add('cocopon/iceberg.vim')
+call dein#add('arzg/vim-colors-xcode')
+call dein#add('ayu-theme/ayu-vim')
+call dein#add('kabbamine/yowish.vim')
 call dein#add('junegunn/fzf', { 'build': './install', 'merged': 0 })
 call dein#add('junegunn/fzf.vim')
 call dein#add('easymotion/vim-easymotion')
@@ -30,13 +34,10 @@ call dein#add('tpope/vim-surround')
 call dein#add('junegunn/vim-easy-align')
 call dein#add('tpope/vim-commentary')
 call dein#add('kassio/neoterm')
-call dein#add('Raimondi/delimitMate')
 call dein#add('sheerun/vim-polyglot')
-call dein#add('evanleck/vim-svelte')
+call dein#add('rhysd/vim-crystal')
 call dein#add('honza/vim-snippets')
-call dein#add('tpope/vim-vinegar')
 call dein#add('mattn/emmet-vim')
-call dein#add('tpope/vim-fugitive')
 call dein#add('itchyny/lightline.vim')
 call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
 call dein#add('sbdchd/neoformat')
@@ -68,30 +69,84 @@ let g:UltiSnipsSnippetsDir="~/.config/nvim/snippets"
 xmap ga <Plug>(EasyAlign)
 
 " Easymotion
-nmap <silent>f <Plug>(easymotion-jumptoanywhere)
+nmap <silent>gt <Plug>(easymotion-jumptoanywhere)
 
-" Coc
+"" Coc
+
+" Diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" use <c-space>for trigger completion
+inoremap <silent><expr> <c-f> coc#refresh()
+nmap <leader>ac <Plug>(coc-codeaction)
+nmap <leader>qf <Plug>(coc-fix-current)
+xmap <leader>a <Plug>(coc-codeaction-selected)
+nmap <leader>a <Plug>(coc-codeaction-selected)
+
 function! CocCurrentFunction()
     return get(b:, 'coc_current_function', '')
 endfunction
 
+function! CocGitDiff()
+  return get(b:, 'coc_git_status', '')
+endfunction
+
+function! CocLastHover()
+  return get(g:, 'coc_last_hover_message', '')
+endfunction
+
+function! CocDiagnostic()
+  return get(b:, 'coc_diagnostic_info', '')['error']
+endfunction
+
+function! CocGitStatus()
+  return get(g:, 'coc_git_status', '')
+endfunction
+
 " Lightline
 let g:lightline = {
-            \ 'colorscheme': 'purify',
-            \ 'active': {
-            \   'left': [ [ 'mode' ], [ 'gitbranch', 'cocstatus', 'currentfunction' ], [ 'readonly', 'filename', 'modified', 'line' ] ],
-            \  'right': [[]],
-            \ },
-            \ 'inactive': {
-            \   'left': [ ['filename', 'readonly', 'modified', 'line'] ],
-            \   'right': [[]],
-            \ },
-            \ 'component_function': {
-            \   'cocstatus': 'coc#status',
-            \   'currentfunction': 'CocCurrentFunction',
-            \   'gitbranch': 'fugitive#head'
-            \ }
-            \ }
+      \   'colorscheme': 'onehalfdark',
+      \   'active': {
+      \     'left': [ [ 'mode' ], 
+      \             [ 'cocbranch',
+      \               'cocstatus'
+      \             ],
+      \             [ 'readonly', 
+      \               'filename', 
+      \               'modified', 
+      \               'line' ] 
+      \             ],
+      \    'right': [[]],
+      \   },
+      \   'inactive': {
+      \     'left': [ ['filename', 'readonly', 'modified', 'line'] ],
+      \     'right': [[]],
+      \   },
+      \   'component_function': {
+      \     'cocstatus': 'coc#status',
+      \     'cocdiag': 'CocDiagnostic',
+      \     'currentfunction': 'CocCurrentFunction',
+      \     'coclasthover': 'CocLastHover',
+      \     'cocbranch': 'CocGitStatus',
+      \     'cocdiff': 'CocGitDiff'
+      \   }
+      \ }
 
 
 
@@ -122,12 +177,10 @@ let g:go_fmt_fail_silently = 1
 """""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""
-" Save
-nnoremap s :w<cr>
-nnoremap Q :qa<cr>
 " Sets how many lines vim will remember
 set history=700
 
+set signcolumn=yes
 set guicursor=
 
 " Enable filetype plugins
@@ -140,7 +193,6 @@ set autoread
 """"""""""""""""""""""""""
 " => Leader hotkeys
 """""""""""""""""""""""""
-" Saving and quiting
 noremap <silent> <leader><cr> :noh<cr>
 
 """""""""""""""""""""""""""""
@@ -152,6 +204,12 @@ set mouse=a
 
 " Disable startup screen
 set shortmess=I
+set shortmess+=c
+set hidden
+
+" Help for coc vim
+set updatetime=300
+set cmdheight=2
 
 " Turn on wild menu
 set wildmenu
@@ -197,7 +255,7 @@ set t_vb=
 set tm=500
 
 " Line numbers
-set number
+set nonumber
 
 " set 0 to jump to last non whitespace character
 map 0 ^
@@ -235,12 +293,25 @@ set encoding=utf8
 
 " Use unix as standard filetype
 set ffs=unix,dos,mac
-set background=light
-color onehalfdark
+set background=dark
+" color vimspectr210-light
 
+
+color yowish
+" let g:yowish.colors = {
+"       \	'backgroundLight'    : ['#0c0e12', '232']
+"       \ }
+" let g:yowish = {
+" 			\ 'term_italic': 1,
+" 		\ }
+
+highlight Normal guibg=#0c0e12
+highlight SignColumn guibg=#0c0e12
 highlight Comment gui=italic cterm=italic
 highlight htmlArg gui=italic cterm=italic
+" highlight jsxAttrib guifg=#ffcc66
 highlight Special gui=italic cterm=italic
+highlight Character gui=italic cterm=italic
 
 """""""""""""""""""""""""""
 " => Text, tabs and indent
@@ -334,7 +405,7 @@ au FileType ruby nnoremap <leader>r :!ruby %<cr>
 """""""""""""""""""""""
 " => Elm
 """""""""""""""""""""""
-au FileType elm nnoremap <leader>c :ElmMake<cr>
+" au FileType elm nnoremap <leader>c :ElmMake<cr>
 
 """""""""""""""""""""""""""""
 " => C section
