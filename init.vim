@@ -10,52 +10,50 @@ set nocompatible              " be iMproved, required
 filetype off                  " required 
 
 set runtimepath+=~/.config/nvim/repos/github.com/Shougo/dein.vim
+set runtimepath+=~/.config/nvim/autoload
 
 call dein#begin('~/.config/nvim')
 
 call dein#add('Shougo/dein.vim')
 call dein#add('sonph/onehalf', {'rtp': 'vim'})
-call dein#add('taniarascia/new-moon.vim')
-call dein#add('challenger-deep-theme/vim')
-call dein#add('nightsense/snow')
-call dein#add('barlog-m/oceanic-primal-vim')
-call dein#add('andreypopp/vim-colors-plain')
-call dein#add('jaredgorski/fogbell.vim')
-call dein#add('cocopon/iceberg.vim')
-call dein#add('arzg/vim-colors-xcode')
-call dein#add('ayu-theme/ayu-vim')
-call dein#add('kabbamine/yowish.vim')
+call dein#add('huyvohcmc/atlas.vim')
 call dein#add('junegunn/fzf', { 'build': './install', 'merged': 0 })
 call dein#add('junegunn/fzf.vim')
-call dein#add('easymotion/vim-easymotion')
-call dein#add('honza/vim-snippets')
-call dein#add('SirVer/ultisnips')
 call dein#add('tpope/vim-surround')
-call dein#add('junegunn/vim-easy-align')
 call dein#add('tpope/vim-commentary')
-call dein#add('kassio/neoterm')
-call dein#add('sheerun/vim-polyglot')
-call dein#add('rhysd/vim-crystal')
-call dein#add('honza/vim-snippets')
 call dein#add('mattn/emmet-vim')
 call dein#add('itchyny/lightline.vim')
+call dein#add('honza/vim-snippets')
+call dein#add('voldikss/vim-floaterm')
+call dein#add('pangloss/vim-javascript')
+call dein#add('MaxMEllon/vim-jsx-pretty')
+call dein#add('neoclide/vim-jsx-improve')
+call dein#add('leafOfTree/vim-svelte-plugin')
+call dein#add('HerringtonDarkholme/yats.vim')
+call dein#add('udalov/kotlin-vim.git')
+call dein#add('windwp/nvim-autopairs')
+call dein#add('SirVer/ultisnips')
 call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
-call dein#add('sbdchd/neoformat')
-call dein#add('prettier/vim-prettier', {'do': 'yarn install', 'for': ['typescript', 'json', 'graphql']})
+call dein#add('rieg-ec/coc-tailwindcss', {'do': 'yarn install --frozen-lockfile && yarn run build'})
+call dein#add('prettier/vim-prettier', {'build': 'npm install', 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html']})
 
 call dein#end()
 
 " FZF 
 nnoremap <leader>b :Buffers<cr>
 nnoremap <leader>f :Rg<cr>
+nnoremap <leader>F :Rg<cr><C-P>
 nnoremap <leader>e :Files<cr>
-nnoremap <leader>l :Marks<cr>
+nnoremap <leader>E :Files<cr><C-P>
+
+let g:fzf_history_dir="~/.config/nvim/fzf-history"
+
 
 command! -bang -nargs=* Rg
             \ call fzf#vim#grep(
             \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-            \   <bang>0 ? fzf#vim#with_preview('up:60%')
-            \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+            \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
+            \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
             \   <bang>0)
 
 " Ultisnips
@@ -65,13 +63,28 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetsDir="~/.config/nvim/snippets"
 
-" Easy align
-xmap ga <Plug>(EasyAlign)
+" Floatterm
+let g:floaterm_wintype="split"
+let g:floaterm_height=0.25
+let g:floaterm_position="belowright"
+nnoremap <leader>d :FloatermToggle<cr><C-\><C-n>
+nnoremap <leader>D :FloatermNew<cr>
 
-" Easymotion
-nmap <silent>gt <Plug>(easymotion-jumptoanywhere)
+" Autopairs
+lua require('nvim-autopairs').setup()
 
 "" Coc
+" Set tab for snippet completion
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 " Diagnostics
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -81,23 +94,9 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
 
 " use <c-space>for trigger completion
 inoremap <silent><expr> <c-f> coc#refresh()
-nmap <leader>ac <Plug>(coc-codeaction)
-nmap <leader>qf <Plug>(coc-fix-current)
-xmap <leader>a <Plug>(coc-codeaction-selected)
-nmap <leader>a <Plug>(coc-codeaction-selected)
 
 function! CocCurrentFunction()
     return get(b:, 'coc_current_function', '')
@@ -119,14 +118,14 @@ function! CocGitStatus()
   return get(g:, 'coc_git_status', '')
 endfunction
 
+let g:jsx_ext_required = 0 
+
 " Lightline
 let g:lightline = {
       \   'colorscheme': 'onehalfdark',
       \   'active': {
       \     'left': [ [ 'mode' ], 
-      \             [ 'cocbranch',
-      \               'cocstatus'
-      \             ],
+      \             [ 'cocstatus' ],
       \             [ 'readonly', 
       \               'filename', 
       \               'modified', 
@@ -140,33 +139,8 @@ let g:lightline = {
       \   },
       \   'component_function': {
       \     'cocstatus': 'coc#status',
-      \     'cocdiag': 'CocDiagnostic',
-      \     'currentfunction': 'CocCurrentFunction',
-      \     'coclasthover': 'CocLastHover',
-      \     'cocbranch': 'CocGitStatus',
-      \     'cocdiff': 'CocGitDiff'
       \   }
       \ }
-
-
-
-" Prettier
-autocmd BufWritePre *.json,*.graphql Neoformat
-let g:neoformat_enabled_javascript = ['prettier']
-let g:neoformat_only_msg_on_error = 1
-
-let g:neoformat_basic_format_align = 1
-
-" Align
-xmap ga <Plug>(EasyAlign)
-
-" Fugitive
-nnoremap <leader>g :Gstatus<cr>
-
-" GoMode stuff
-let g:go_fmt_autosave = 1
-let g:go_fmt_fail_silently = 1
-
 
 """""""""""""""""
 "               "
@@ -203,8 +177,8 @@ set inccommand=split
 set mouse=a
 
 " Disable startup screen
-set shortmess=I
-set shortmess+=c
+set shortmess+=I
+" set shortmess+=ca
 set hidden
 
 " Help for coc vim
@@ -295,9 +269,11 @@ set encoding=utf8
 set ffs=unix,dos,mac
 set background=dark
 " color vimspectr210-light
+color onehalfdark
 
+" color yowish
+" color two-firewatch
 
-color yowish
 " let g:yowish.colors = {
 "       \	'backgroundLight'    : ['#0c0e12', '232']
 "       \ }
@@ -305,8 +281,12 @@ color yowish
 " 			\ 'term_italic': 1,
 " 		\ }
 
-highlight Normal guibg=#0c0e12
-highlight SignColumn guibg=#0c0e12
+highlight Normal guibg=#1d232e
+highlight SignColumn guibg=#1d232e
+
+" highlight Normal guibg=#0c0e12
+" highlight SignColumn guibg=#0c0e12
+" highlight SignColumn guibg=#2C323B
 highlight Comment gui=italic cterm=italic
 highlight htmlArg gui=italic cterm=italic
 " highlight jsxAttrib guifg=#ffcc66
@@ -418,7 +398,7 @@ au FileType c inoremap ,. ->
 " => Cpp section
 """""""""""""""""""""""""""""
 " au FileType cpp nnoremap <Leader>t :!/tmp/%<
-au FileType cpp nnoremap <Leader>c :AsyncRun clang++ -Weverything -std=c++14 -o /tmp/%:t:r %
+au FileType cpp nnoremap <Leader>c :FloatermSend clang++ -std=c++14 -o /tmp/%:t:r %
 au FileType cpp inoremap ,. ->
 au FileType cpp inoremap ., ::
 
@@ -459,7 +439,11 @@ tnoremap <esc><esc> <C-\><C-n>
 let g:neoterm_autoscroll=1
 let g:neoterm_default_mod='vertical rightbelow 35%'
 
-nnoremap <silent><leader>o :<c-u>exec v:count.'Ttoggle'<cr>
-nnoremap <leader>r :T 
-nnoremap <leader>t :Ttoggle<cr>
-nnoremap <leader>m :T <Up>
+" let g:floaterm_keymap_toggle = '<f5>'
+
+
+nnoremap <silent><leader>o :<c-u>exec v:count.'FloatermToggle'<cr><C-\><C-n>
+nnoremap <leader>r :FloatermSend 
+nnoremap <leader>m :FloatermSend<Up>
+
+set t_md=
