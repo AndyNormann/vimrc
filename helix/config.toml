@@ -1,0 +1,23 @@
+theme = "onehalfdark"
+
+[editor]
+gutters = ["diagnostics", "diff"]
+true-color = true
+color-modes = true
+
+[editor.statusline]
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[keys.normal]
+"{" = ["move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up"]
+"}" = ["move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down"]
+";" = "command_mode"
+
+[keys.insert]
+"esc" = ["move_char_left", "normal_mode"]
+[keys.normal.space]
+"f" = "file_picker_in_current_directory"
+"F" = "file_picker"
+

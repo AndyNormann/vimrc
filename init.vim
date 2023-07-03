@@ -17,6 +17,8 @@ call dein#begin('~/.config/nvim')
 call dein#add('Shougo/dein.vim')
 call dein#add('sonph/onehalf', {'rtp': 'vim'})
 call dein#add('huyvohcmc/atlas.vim')
+call dein#add('rakr/vim-one')
+call dein#add('mhartington/oceanic-next')
 call dein#add('junegunn/fzf', { 'build': './install', 'merged': 0 })
 call dein#add('junegunn/fzf.vim')
 call dein#add('tpope/vim-surround')
@@ -28,16 +30,26 @@ call dein#add('voldikss/vim-floaterm')
 call dein#add('pangloss/vim-javascript')
 call dein#add('MaxMEllon/vim-jsx-pretty')
 call dein#add('neoclide/vim-jsx-improve')
+call dein#add('bfrg/vim-cpp-modern')
 call dein#add('leafOfTree/vim-svelte-plugin')
 call dein#add('HerringtonDarkholme/yats.vim')
 call dein#add('udalov/kotlin-vim.git')
 call dein#add('windwp/nvim-autopairs')
+call dein#add('puremourning/vimspector')
+call dein#add('jceb/vim-orgmode')
+call dein#add('github/copilot.vim')
 call dein#add('SirVer/ultisnips')
+call dein#add('yegappan/disassemble')
 call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
 call dein#add('rieg-ec/coc-tailwindcss', {'do': 'yarn install --frozen-lockfile && yarn run build'})
 call dein#add('prettier/vim-prettier', {'build': 'npm install', 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html']})
 
 call dein#end()
+
+" Vimspector
+let g:vimspector_base_dir='/Users/andreasfladstad/.config/nvim/.cache/init.vim/.dein'
+let g:vimspector_enable_mappings = 'HUMAN'
+nmap <F5> <Plug>VimspectorContinue
 
 " FZF 
 nnoremap <leader>b :Buffers<cr>
@@ -90,9 +102,17 @@ endfunction
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Run the Code Lens action on the current line
+nmap <leader>cl  <Plug>(coc-codelens-action)
+
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction)
 
 
 " use <c-space>for trigger completion
@@ -270,6 +290,7 @@ set ffs=unix,dos,mac
 set background=dark
 " color vimspectr210-light
 color onehalfdark
+" color one
 
 " color yowish
 " color two-firewatch
