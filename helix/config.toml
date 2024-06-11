@@ -1,23 +1,60 @@
-theme = "onehalfdark"
+theme = "custom"
 
 [editor]
-gutters = ["diagnostics", "diff"]
+gutters = ["diagnostics"]
 true-color = true
 color-modes = true
+line-number = "relative"
+
+[editor.file-picker]
+hidden = false
 
 [editor.statusline]
 mode.normal = "NORMAL"
 mode.insert = "INSERT"
 mode.select = "SELECT"
+left = ["mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator"]
+right = []
+
+[editor.soft-wrap]
+enable = true
+
+[editor.lsp]
+display-messages = true
+# display-inlay-hints = true
 
 [keys.normal]
-"{" = ["move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up"]
-"}" = ["move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down"]
+"{" = ["move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "keep_primary_selection"]
+"}" = ["move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "keep_primary_selection"]
 ";" = "command_mode"
+":" = "collapse_selection"
+"$" = "goto_line_end"
+"0" = "goto_line_start"
+p = ["replace_selections_with_clipboard", "collapse_selection"]
+P = ["paste_clipboard_after", "collapse_selection"]
+y = ["yank_to_clipboard", "collapse_selection"]
+esc = ["collapse_selection", "keep_primary_selection"]
+"%" = "match_brackets"
+"C-g" = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
+"G" = ["goto_last_line"]
+"≈" = ["shrink_selection"]
+"ø" = ["expand_selection"]
+
+[keys.select]
+"$" = "goto_line_end"
+"0" = "goto_line_start"
+p = ["paste_clipboard_after", "collapse_selection"]
+P = ["paste_clipboard_before", "collapse_selection"]
+y = ["yank_to_clipboard", "collapse_selection"]
+R = ["replace_selections_with_clipboard", "collapse_selection"]
+"{" = ["move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "move_line_up", "keep_primary_selection"]
+"}" = ["move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "move_line_down", "keep_primary_selection"]
+"≈" = ["shrink_selection"]
+"ø" = ["expand_selection"]
 
 [keys.insert]
 "esc" = ["move_char_left", "normal_mode"]
 [keys.normal.space]
-"f" = "file_picker_in_current_directory"
-"F" = "file_picker"
+"e" = "file_picker_in_current_directory"
+
 

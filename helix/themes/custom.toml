@@ -1,0 +1,11 @@
+# inherits = "new_moon"
+inherits = "onedark"
+# inherits = "catppuccin_mocha"
+# inherits = "kanagawa"
+# inherits = "everblush"
+
+"ui.background" = "none"
+"ui.virtual.jump-label" = { fg = "light-gray", modifiers = [] }
+"ui.statusline.normal" = { fg = "#000000", bg = "blue", modifiers = [] }
+"ui.statusline.insert" = { fg = "#000000", bg = "green", modifiers = [] }
+"ui.statusline.select" = { fg = "#000000", bg = "purple", modifiers = [] }
