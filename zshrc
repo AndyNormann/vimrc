@@ -1,14 +1,29 @@
+# export LS_COLORS="di=34:bd=33:cd=33:so=31:ex=32:ur=33:uw=31:ux=32:ue=32:uu=33:gu=33:lc=31:df=32:sn=32:nb=32:nk=32:nm=32:ng=32:nt=32"
+# export EXA_COLORS=di=34:bd=33:cd=33:so=31:ex=32:ur=33:uw=31:ux=32:ue=32:uu=33:gu=33:lc=31:df=32:sn=32:nb=32:nk=32:nm=32:ng=32:nt=32
+# export LS_COLORS=di=34:bd=33:cd=33:so=31:ex=32:ur=33:uw=31:ux=32:ue=32:uu=33:gu=33:lc=31:df=32:sn=32:nb=32:nk=32:nm=32:ng=32:nt=32
+# export EZA_COLORS="di=34:bd=33:cd=33:so=31:ex=32:ur=33:uw=31:ux=32:ue=32:uu=33:gu=33:lc=31:df=32:sn=32:nb=32:nk=32:nm=32:ng=32:nt=32"
+export EZA_COLORS="reset:*.json=33:di=34:bd=33:cd=33:so=31:ex=32:ur=33:uw=31:ux=32:ue=32:uu=33:gu=33:lc=31:df=32:sn=32:nb=32:nk=32:nm=32:ng=32:nt=32"
 
-export LS_COLORS="di=34:bd=33:cd=33:so=31:ex=32:ur=33:uw=31:ux=32:ue=32:uu=33:gu=33:lc=31:df=32:sn=32:nb=32:nk=32:nm=32:ng=32:nt=32"
 export EDITOR=nvim
 
-alias sl="lsd"
-alias ls="lsd"
-alias l="lsd -l"
-alias la="lsd -la"
+export HISTFILESIZE=1000000000
+export HISTSIZE=1000000000
+export HISTFILE=~/.zsh_history
+setopt INC_APPEND_HISTORY
+setopt EXTENDED_HISTORY
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt SHARE_HISTORY
+
+alias sl="eza"
+alias ls="eza"
+alias l="eza -l"
+alias la="eza -la"
+alias ll="eza"
+alias lls="eza"
+alias tree="eza --tree"
 alias c="clear"
 alias .="cd .."
-alias cd="z"
 alias vim="nvim"
 alias vi="nvim"
 alias v="nvim"
@@ -16,10 +31,12 @@ alias gd="git difftool --no-symlinks --dir-diff"
 alias gco="git checkout"
 alias gcm="git checkout main"
 alias gcd="git checkout develop"
-alias gp="git pull"
+alias gp="git pull --rebase"
 alias gcmsg="git commit -m"
 alias gst="git status"
 alias jai="~/.scripts/jai/bin/jai-macos"
+
+function cd() { builtin cd $1 && zoxide add . }
 
 function parse_git_branch() {
     git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/(\1)/p'
@@ -37,18 +54,7 @@ bindkey '^N' history-beginning-search-forward-end
 eval "$(zoxide init zsh)"
 export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
 export FZF_DEFAULT_OPTS="--history=$HOME/.fzf_history"
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
-
-# bun completions
-[ -s "/Users/andreasfladstad/.bun/_bun" ] && source "/Users/andreasfladstad/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
+source <(fzf --zsh)
 
 setopt PROMPT_SUBST
 

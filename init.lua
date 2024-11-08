@@ -5,6 +5,74 @@ local g = vim.g
 local cmd = vim.cmd
 local fn = vim.fn
 local api = vim.api
+local o = vim.o
+
+-- Options
+opt.history = 700
+opt.signcolumn = "yes:1"
+opt.autoread = true
+opt.inccommand = "split"
+opt.mouse = "a"
+opt.shortmess = opt.shortmess + "I"
+opt.hidden = true
+opt.updatetime = 100
+opt.wildmenu = true
+opt.wildignore = "*.o,*~,*.class"
+opt.cmdheight = 0
+opt.cmdwinheight = 1
+opt.backspace = "eol,start,indent"
+opt.whichwrap = opt.whichwrap + "<,>,h,l"
+opt.ignorecase = true
+opt.smartcase = true
+opt.hlsearch = true
+opt.incsearch = true
+opt.magic = true
+opt.timeoutlen = 1000
+opt.ttimeoutlen = 0
+opt.showmatch = true
+opt.mat = 2
+opt.number = false
+opt.backup = false
+opt.writebackup = false
+opt.scrolloff = 5
+opt.completeopt = "noselect,menuone,longest"
+
+opt.laststatus = 0
+opt.smd = false
+opt.ru = false
+opt.display = "lastline"
+opt.termguicolors = true
+opt.encoding = "utf8"
+
+opt.expandtab = true
+opt.smarttab = true
+opt.shiftwidth = 2
+opt.tabstop = 2
+opt.lbr = true
+opt.tw = 500
+opt.ai = true
+opt.si = true
+opt.wrap = true
+
+opt.shada = "!,'300,<50,s10,h"
+
+opt.clipboard = "unnamedplus"
+opt.undofile = true
+
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldtext = ""
+opt.foldenable = false
+opt.foldnestmax = 2
+opt.foldlevel = 99
+opt.foldlevelstart = 1
+opt.foldcolumn = "0"
+opt.cursorline = false
+g.markdown_folding = 1
+g.skip_ts_context_commentstring_module = true
+
+opt.background = "dark"
+o.background = "dark"
 
 g.mapleader = " "
 g.maplocalleader = " "
@@ -35,8 +103,10 @@ require("lazy").setup({
 	-- 		vim.opt.rtp:append(plugin.dir .. "/lua")
 	-- 	end,
 	-- },
-	{ "RRethy/base16-nvim", lazy = false, priority = 1000 },
-	{ "mattn/emmet-vim", lazy = true, event = "VeryLazy" },
+	{ "rebelot/kanagawa.nvim", lazy = false, priority = 1000 },
+	{ "catppuccin/nvim", lazy = false, priority = 1000 },
+
+	{ "mattn/emmet-vim", event = "VeryLazy" },
 	{
 		"voldikss/vim-floaterm",
 		event = "VeryLazy",
@@ -55,7 +125,36 @@ require("lazy").setup({
 			g.floaterm_autoinsert = false
 		end,
 	},
-	{ "Tetralux/jai.vim", ft = { "jai" } },
+	{
+		"stevearc/oil.nvim",
+		event = "VeryLazy",
+		dependencies = { { "echasnovski/mini.icons", opts = {} } },
+		opts = {
+			default_file_explorer = true,
+			view_options = {
+				show_hidden = true,
+			},
+		},
+		keys = { { "-", "<cmd>Oil<cr>" } },
+	},
+	{
+		"rachartier/tiny-code-action.nvim",
+		dependencies = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "nvim-telescope/telescope.nvim" },
+		},
+		event = "LspAttach",
+		keys = {
+			{
+				"<Leader>ca",
+				function()
+					require("tiny-code-action").code_action()
+				end,
+				{ noremap = true, silent = true },
+			},
+		},
+		opts = {},
+	},
 	{
 		"nvim-treesitter/nvim-treesitter",
 		lazy = true,
@@ -63,40 +162,41 @@ require("lazy").setup({
 		event = "BufRead",
 		build = ":TSUpdate",
 		config = function()
-			if not g.vscode then
-				local configs = require("nvim-treesitter.configs")
-				require("nvim-treesitter.install").compilers = { "clang" }
-				configs.setup({
-					ensure_installed = {
-						"c",
-						"lua",
-						"cpp",
-						"css",
-						"odin",
-						"gitignore",
-						"json",
-						"scss",
-						"markdown",
-						"markdown_inline",
-						"org",
-						"vim",
-						"vimdoc",
-						"query",
-					},
-					highlight = {
-						enable = true,
-						use_languagetree = true,
-						additional_vim_regex_highlighting = true,
-					},
-					fold = {
-						fold_one_line_after = true,
-					},
-					indent = { enable = true },
-				})
+			if g.vscode then
+				return
 			end
+
+			local configs = require("nvim-treesitter.configs")
+			require("nvim-treesitter.install").compilers = { "clang" }
+			configs.setup({
+				ensure_installed = {
+					"c",
+					"lua",
+					"cpp",
+					"css",
+					"odin",
+					"gitignore",
+					"json",
+					"scss",
+					"markdown",
+					"markdown_inline",
+					"org",
+					"vim",
+					"vimdoc",
+					"query",
+				},
+				highlight = {
+					enable = true,
+					use_languagetree = true,
+					additional_vim_regex_highlighting = true,
+				},
+				fold = {
+					fold_one_line_after = true,
+				},
+				indent = { enable = true },
+			})
 		end,
 	},
-	{ "norcalli/nvim-colorizer.lua", event = "VeryLazy", opts = {} },
 	{
 		"numToStr/Comment.nvim",
 		event = "VeryLazy",
@@ -118,10 +218,6 @@ require("lazy").setup({
 		},
 	},
 	{
-		"cohama/lexima.vim",
-		event = "VeryLazy",
-	},
-	{
 		"kylechui/nvim-surround",
 		event = "VeryLazy",
 		opts = {},
@@ -141,8 +237,6 @@ require("lazy").setup({
 			{ "<Leader>r", "<cmd>Telescope resume<cr>" },
 		},
 		config = function()
-			-- local border_chars_outer_thin_telescope = { "▔", "▕", "▁", "▏", "🭽", "🭾", "🭿", "🭼" }
-			-- local border_chars_outer_thick_telescope = { "▀", "▐", "▄", "▌", "▛", "▜", "▟", "▙" }
 			local actions = require("telescope.actions")
 			require("telescope").setup({
 				pickers = {
@@ -151,12 +245,6 @@ require("lazy").setup({
 					},
 				},
 				defaults = {
-					-- borderchars = {
-					-- 	prompt = border_chars_outer_thick_telescope,
-					-- 	results = border_chars_outer_thick_telescope,
-					-- 	preview = border_chars_outer_thick_telescope,
-					-- },
-					-- border = true,
 					mappings = {
 						n = {
 							["<esc>"] = actions.close,
@@ -181,23 +269,25 @@ require("lazy").setup({
 	},
 	{
 		"folke/noice.nvim",
-		lazy = false,
-		-- event = "VeryLazy",
+		priority = 1000,
+		lazy = true,
+		enabled = not g.vscode,
+		event = "VeryLazy",
 		opts = {
 			presets = {
 				bottom_search = true,
 				command_palette = false,
-				lsp_doc_border = false,
+				lsp_doc_border = true,
 			},
 			messages = {
 				enabled = true,
 				view_search = false,
 			},
 			cmdline = {
+				enabled = true,
 				view = "cmdline",
 			},
 		},
-		dependencies = { "MunifTanjim/nui.nvim" },
 	},
 	{
 		"L3MON4D3/LuaSnip",
@@ -226,33 +316,31 @@ require("lazy").setup({
 		end,
 	},
 	{
-		"kdheepak/lazygit.nvim",
-		cmd = {
-			"LazyGit",
-			"LazyGitConfig",
-			"LazyGitCurrentFile",
-			"LazyGitFilter",
-			"LazyGitFilterCurrentFile",
-		},
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
-		keys = {
-			{ "<leader>g", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+		"pmizio/typescript-tools.nvim",
+		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+		enabled = not g.vscode,
+		event = "BufRead",
+		filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript" },
+		opts = {
+			settings = {
+				jsx_close_tag = {
+					enable = true,
+					filetypes = { "javascriptreact", "typescriptreact" },
+				},
+			},
 		},
 	},
 	{
-		"pmizio/typescript-tools.nvim",
-		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-		event = "BufRead",
-		filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
-		opts = {},
+		"rachartier/tiny-inline-diagnostic.nvim",
+		event = "VeryLazy",
+		config = function()
+			require("tiny-inline-diagnostic").setup()
+		end,
 	},
 	{
 		"hrsh7th/nvim-cmp",
 		event = { "LspAttach" },
 		dependencies = {
-			-- "hrsh7th/cmp-cmdline",
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
@@ -260,13 +348,22 @@ require("lazy").setup({
 			"onsails/lspkind.nvim",
 			"hrsh7th/cmp-nvim-lua",
 			"hrsh7th/cmp-nvim-lsp-signature-help",
+			"zbirenbaum/copilot-cmp",
+			"windwp/nvim-autopairs",
 		},
 		config = function()
 			local cmp = require("cmp")
 			local lspkind = require("lspkind")
+			require("copilot_cmp").setup()
+			require("nvim-autopairs").setup()
+			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+
+			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
 			cmp.setup({
-				completion = { completeopt = "menu, menuone, noselect" },
+				completion = {
+					completeopt = "menu, menuone, noselect",
+				},
 				mapping = cmp.mapping.preset.insert({
 					["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
 					["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
@@ -275,6 +372,17 @@ require("lazy").setup({
 					["<C-Space>"] = cmp.mapping.complete({}), -- show completion suggestions
 					["<C-c>"] = cmp.mapping.abort(), -- close completion window
 					["<C-CR>"] = cmp.mapping.confirm({ select = true }), -- select suggestion
+					["<CR>"] = cmp.mapping({
+						i = function(fallback)
+							if cmp.visible() and cmp.get_active_entry() then
+								cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+							else
+								fallback()
+							end
+						end,
+						s = cmp.mapping.confirm({ select = true }),
+						c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+					}),
 				}),
 				window = {
 					completion = cmp.config.window.bordered({
@@ -289,15 +397,13 @@ require("lazy").setup({
 					}),
 				},
 
-				-- sources for autocompletion
 				sources = cmp.config.sources({
-					{ name = "codeium", max_item_count = 1, group_index = 1 },
+					{ name = "copilot", max_item_count = 1, group_index = 1 },
 					{ name = "path", group_index = 1 },
 					{ name = "nvim_lsp", group_index = 2 },
 					{ name = "buffer", group_index = 3 },
 					{ name = "nvim_lsp_signature_help" },
 				}),
-				-- Enable icons for lsp/autocompletion
 				formatting = {
 					expandable_indicator = true,
 					format = lspkind.cmp_format({
@@ -310,7 +416,7 @@ require("lazy").setup({
 					}),
 				},
 				experimental = {
-					ghost_text = true,
+					ghost_text = false,
 				},
 			})
 		end,
@@ -325,14 +431,17 @@ require("lazy").setup({
 			"nvim-lua/plenary.nvim",
 			"hrsh7th/cmp-nvim-lsp",
 			"stevearc/conform.nvim",
-			"Exafunction/codeium.nvim",
+			{ "zbirenbaum/copilot.lua", cmd = "Copilot" },
 		},
 		config = function()
 			require("mason").setup({})
 			require("mason-lspconfig").setup({})
-			require("codeium").setup({ enable_chat = true })
+			require("copilot").setup({
+				suggestion = { enabled = false },
+				panel = { enabled = false },
+			})
 
-			local prettier_config = { "prettierd", "prettier" }
+			local prettier_config = "prettierd"
 			require("conform").setup({
 				formatters_by_ft = {
 					lua = { "stylua" },
@@ -340,7 +449,10 @@ require("lazy").setup({
 					scss = { prettier_config },
 					typescript = { prettier_config },
 					typescriptreact = { prettier_config },
+					javascript = { prettier_config },
 					svelte = { prettier_config },
+					go = { "gofumpt" },
+					templ = { "gofumpt" },
 					c = { "clangd" },
 					cpp = { "clangd" },
 				},
@@ -366,6 +478,9 @@ require("lazy").setup({
 				marksman = {},
 				svelte = {},
 				ols = {},
+				zls = {},
+				gopls = {},
+				templ = {},
 			}
 
 			-- Default handlers for LSP
@@ -373,9 +488,6 @@ require("lazy").setup({
 				["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
 				["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" }),
 			}
-			vim.diagnostic.config({
-				virtual_text = false,
-			})
 
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(args)
@@ -383,11 +495,6 @@ require("lazy").setup({
 					client.server_capabilities.semanticTokensProvider = nil
 				end,
 			})
-
-			api.nvim_exec(
-				[[autocmd CursorHold * lua vim.diagnostic.open_float(0, {scope = "cursor", focusable = false})]],
-				false
-			)
 
 			-- nvim-cmp supports additional completion capabilities
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -478,222 +585,12 @@ cmd([[
   au FocusGained,BufEnter * :silent! !
 ]])
 
--- Options
-opt.history = 700
-opt.signcolumn = "yes:1"
-opt.autoread = true
-opt.inccommand = "split"
-opt.mouse = "a"
-opt.shortmess = opt.shortmess + "I"
-opt.hidden = true
-opt.updatetime = 100
-opt.cmdheight = 2
-opt.wildmenu = true
-opt.wildignore = "*.o,*~,*.class"
-opt.cmdheight = 1
-opt.cmdwinheight = 1
-opt.backspace = "eol,start,indent"
-opt.whichwrap = opt.whichwrap + "<,>,h,l"
-opt.ignorecase = true
-opt.smartcase = true
-opt.hlsearch = true
-opt.incsearch = true
-opt.magic = true
-opt.timeoutlen = 1000
-opt.ttimeoutlen = 0
-opt.showmatch = true
-opt.mat = 2
-opt.number = false
-opt.backup = false
-opt.writebackup = false
-opt.scrolloff = 5
-opt.completeopt = "noselect,menuone,longest"
+-- cmd.colorscheme("catppuccin")
+-- cmd.colorscheme("decay")
+cmd.colorscheme("kanagawa-wave")
+-- cmd.colorscheme("catppuccin-mocha")
 
-opt.laststatus = 2
-opt.smd = false
-opt.ru = false
-opt.display = "lastline"
-opt.termguicolors = true
-opt.encoding = "utf8"
-opt.background = "dark"
-
-opt.expandtab = true
-opt.smarttab = true
-opt.shiftwidth = 2
-opt.tabstop = 2
-opt.lbr = true
-opt.tw = 500
-opt.ai = true
-opt.si = true
-opt.wrap = true
-
-opt.shada = "!,'300,<50,s10,h"
-
-opt.clipboard = "unnamedplus"
-opt.undofile = true
-
-opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
-opt.foldtext = ""
-opt.foldenable = false
-opt.foldnestmax = 2
-opt.foldlevel = 99
-opt.foldlevelstart = 1
-opt.foldcolumn = "0"
-opt.cursorline = false
-g.markdown_folding = 1
-g.skip_ts_context_commentstring_module = true
-
-api.nvim_exec([[au BufRead,BufNewFile *.jai set filetype=jai]], false)
-
--- Statusline
-local modes = {
-	["n"] = "NORMAL",
-	["no"] = "NORMAL",
-	["v"] = "VISUAL",
-	["V"] = "V-LINE",
-	[""] = "V-BLCK",
-	["s"] = "SELECT",
-	["S"] = "SELECT LINE",
-	[""] = "SELECT BLOCK",
-	["i"] = "INSERT",
-	["ic"] = "INSERT",
-	["R"] = "REPLACE",
-	["Rv"] = "VISUAL REPLACE",
-	["c"] = "COMAND",
-	["cv"] = "VIM EX",
-	["ce"] = "EX",
-	["r"] = "PROMPT",
-	["rm"] = "MOAR",
-	["r?"] = "CONFIRM",
-	["!"] = "SHELL",
-	["t"] = "TERMINAL",
-}
-local function mode()
-	local current_mode = api.nvim_get_mode().mode
-	return string.format(" %s ", modes[current_mode]):upper()
-end
-
-local function update_mode_colors()
-	local current_mode = api.nvim_get_mode().mode
-	local mode_color = "%#StatusLineAccent#"
-	if current_mode == "n" then
-		mode_color = "%#StatuslineAccent#"
-	elseif current_mode == "i" or current_mode == "ic" then
-		mode_color = "%#StatuslineInsertAccent#"
-	elseif current_mode == "v" or current_mode == "V" or current_mode == "" then
-		mode_color = "%#StatuslineVisualAccent#"
-	elseif current_mode == "R" then
-		mode_color = "%#StatuslineReplaceAccent#"
-	elseif current_mode == "c" then
-		mode_color = "%#StatuslineCmdLineAccent#"
-	elseif current_mode == "t" then
-		mode_color = "%#StatuslineTerminalAccent#"
-	end
-	return mode_color
-end
-local function filename()
-	local fname = fn.expand("%:t")
-	if fname == "" then
-		return ""
-	end
-	return fname .. " "
-end
-
-local function lsp()
-	if #vim.lsp.buf_get_clients() == 0 then
-		return ""
-	end
-	local names = ""
-	for _, client in ipairs(vim.lsp.get_active_clients()) do
-		if client.name == "typescript-tools" then
-			names = names .. "ts "
-		elseif client.name == "jsonls" then
-			names = names .. "json "
-		elseif client.name == "cssls" then
-			names = names .. "css "
-		elseif client.name == "htmlls" then
-			names = names .. "html "
-		elseif client.name == "lua_ls" then
-			names = names .. "lua "
-		else
-			names = names .. client.name .. " "
-		end
-	end
-	names = names:sub(1, -2)
-
-	return "%#Comment# [" .. names .. "]"
-end
-
-Statusline = {}
-
-Statusline.active = function()
-	return table.concat({
-		"%#Statusline#",
-		update_mode_colors(),
-		mode(),
-		lsp(),
-		"%#Normal# ",
-		filename(),
-		"%m",
-		"%#Normal#",
-	})
-end
-
-function Statusline.inactive()
-	return " %t"
-end
-
-if g.vscode then
-else
-	-- cmd("colorscheme kanagawa")
-	-- cmd("colorscheme doomchad")
-	-- cmd.colorscheme("catppuccin")
-	-- cmd.colorscheme("rxyhn")
-	-- cmd.colorscheme("onenord_light")
-	-- cmd.colorscheme("everforest")
-	-- cmd.colorscheme("base16-catppuccin")
-	-- cmd.colorscheme("base16-tokyo-city-dark")
-	cmd.colorscheme("base16-material-darker")
-	-- cmd.colorscheme("base16-decaf")
-	api.nvim_set_hl(0, "Normal", { bg = "none" })
-	api.nvim_set_hl(0, "NormalNC", { bg = "none" })
-	api.nvim_set_hl(0, "SignColumn", { bg = "none" })
-	api.nvim_set_hl(0, "Visual", { reverse = true })
-	-- api.nvim_set_hl(0, "CursorLine", { reverse = true })
-end
-
--- Monochrome colors
--- api.nvim_exec([[ hi StatuslineAccent guibg=#CCCCCC guifg=#101010 ]], false)
--- api.nvim_exec([[ hi StatuslineInsertAccent guibg=#AAAAAA guifg=#0A1219 ]], false)
--- api.nvim_exec([[ hi StatuslineVisualAccent guibg=#F9FAFB guifg=#111827 ]], false)
--- api.nvim_exec([[ hi StatuslineReplaceAccent guibg=#c6c6c6 guifg=#262626 ]], false)
--- api.nvim_exec([[ hi StatuslineCmdLineAccent guibg=#888888 guifg=#101010 ]], false)
--- api.nvim_exec([[ hi StatuslineTerminalAccent guibg=#EBEBEB guifg=#101010 ]], false)
-
--- One dark colors
-api.nvim_exec([[ hi StatuslineAccent guibg=#95c561 guifg=#06080a ]], false)
-api.nvim_exec([[ hi StatuslineInsertAccent guibg=#7199ee guifg=#06080a ]], false)
-api.nvim_exec([[ hi StatuslineVisualAccent guibg=#d7a65f guifg=#06080a ]], false)
-api.nvim_exec([[ hi StatuslineReplaceAccent guibg=#ee6d85 guifg=#06080a ]], false)
-api.nvim_exec([[ hi StatuslineCmdLineAccent guibg=#95c561 guifg=#06080a ]], false)
-api.nvim_exec([[ hi StatuslineTerminalAccent guibg=#95c561 guifg=#06080a ]], false)
-
--- Catppuccin colors
--- api.nvim_exec([[ hi StatuslineAccent guibg=#CBA6F7 guifg=#06080a ]], false)
--- api.nvim_exec([[ hi StatuslineInsertAccent guibg=#89B4FA guifg=#06080a ]], false)
--- api.nvim_exec([[ hi StatuslineVisualAccent guibg=#F5C2E7 guifg=#06080a ]], false)
--- api.nvim_exec([[ hi StatuslineReplaceAccent guibg=#ee6d85 guifg=#06080a ]], false)
--- api.nvim_exec([[ hi StatuslineCmdLineAccent guibg=#95c561 guifg=#06080a ]], false)
--- api.nvim_exec([[ hi StatuslineTerminalAccent guibg=#95c561 guifg=#06080a ]], false)
-
-api.nvim_exec(
-	[[
-  augroup Statusline
-  au!
-  au WinEnter,BufEnter * setlocal statusline=%!v:lua.Statusline.active()
-  au WinLeave,BufLeave * setlocal statusline=%!v:lua.Statusline.inactive()
-  augroup END
-]],
-	false
-)
+api.nvim_set_hl(0, "Normal", { bg = "none" })
+api.nvim_set_hl(0, "NormalNC", { bg = "none" })
+api.nvim_set_hl(0, "SignColumn", { bg = "none" })
+api.nvim_set_hl(0, "Visual", { reverse = true })
