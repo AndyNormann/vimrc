@@ -1,0 +1,41 @@
+window-decoration = true
+macos-titlebar-style = tabs
+macos-window-shadow = false
+macos-option-as-alt = false
+mouse-hide-while-typing = true
+
+## Cascadia Code
+font-family = Cascadia Code
+#font-family = Maple Mono
+
+#font-style = SemiBold
+#font-style-italic = SemiBold Italic
+#font-style-bold = SemiBold
+#font-style-bold-italic = SemiBold Italic
+
+font-style = Bold
+font-style-italic = Bold Italic
+font-style-bold = Bold
+font-style-bold-italic = Bold Italic
+
+font-feature = "salt,calt"
+
+font-size = 21
+window-inherit-font-size = false
+#adjust-cell-height = -4
+adjust-cell-height = -16%
+adjust-cell-width = 0
+font-thicken = true
+font-thicken-strength = 100
+theme = catppuccin-mocha
+#theme = OneHalfDark
+#theme = Everforest Dark - Hard
+background = #12121c
+#background = #111111
+#background = #ffffff
+window-padding-x = 0
+window-padding-y = 0
+window-padding-balance = true
+
+
+keybind = cmd+r=reload_config
