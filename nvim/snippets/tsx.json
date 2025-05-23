@@ -1,0 +1,23 @@
+{
+  "console.log": {
+    "prefix": "cl",
+    "body": "console.log(\"$1\")"
+  },
+  "div": {
+    "prefix": "div",
+    "body": "<div>$1</div>"
+  },
+  "span": {
+    "prefix": "span",
+    "body": "<span>$1</span>"
+  },
+  "p": {
+    "prefix": "p",
+    "body": "<p>$1</p>"
+  },
+  "translation": {
+    "prefix": "t",
+    "body": "t(\"$1\")"
+  }
+}
+
