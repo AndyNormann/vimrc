@@ -1,0 +1,46 @@
+{
+    "name": "friendly-snippets",
+    "engines": {
+        "vscode": "^1.11.0"
+    },
+    "contributes": {
+        "snippets": [
+            {
+                "language": "c",
+                "path": "./c/c.json"
+            },
+            {
+                "language": "cdoc",
+                "path": "./c/cdoc.json"
+            },
+            {
+                "language": "cpp",
+                "path": "./cpp/cpp.json"
+            },
+            {
+                "language": ["typescript", "typescriptreact"],
+                "path": "./javascript/typescript.json"
+            },
+            {
+                "language": "javascriptreact",
+                "path": "./javascript/next.json"
+            },
+            {
+                "language": "typescriptreact",
+                "path": "./javascript/react-ts.json"
+            },
+            {
+                "language": "typescriptreact",
+                "path": "./javascript/next-ts.json"
+            },
+            {
+                "language": "javascriptreact",
+                "path": "./javascript/react.json"
+            },
+            {
+                "language": "make",
+                "path": "./make.json"
+            }
+        ]
+    }
+}

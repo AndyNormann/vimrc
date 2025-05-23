@@ -44,7 +44,7 @@ add({ source = "smoka7/hop.nvim" })
 add({ source = "garymjr/nvim-snippets" })
 add({
 	source = "saghen/blink.cmp",
-	checkout = "1.3.1",
+	checkout = "v1.3.1",
 })
 add({
 	source = "nvim-treesitter/nvim-treesitter",
@@ -56,6 +56,19 @@ add({
 		end,
 	},
 })
+add({
+	source = "L3MON4D3/LuaSnip",
+	checkout = "v2.4.0",
+	hooks = {
+		post_checkout = function(args)
+			vim.system({ "make", "-C", args.path, "install_jsregexp" })
+		end,
+		post_install = function(args)
+			vim.system({ "make", "-C", args.path, "install_jsregexp" })
+		end,
+	},
+})
+add({ source = "rafamadriz/friendly-snippets" })
 
 now(function()
 	vim.cmd.colorscheme("catppuccin-mocha")
@@ -63,6 +76,7 @@ now(function()
 	-- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 	-- vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
 	-- vim.api.nvim_set_hl(0, "SignColumn", { bg = "none" })
+	vim.api.nvim_set_hl(0, "Visual", { reverse = true })
 
 	require("mason").setup()
 	require("mason-lspconfig").setup()
@@ -96,35 +110,22 @@ later(function()
 			typescriptreact = { "prettierd" },
 			javascript = { "prettierd" },
 			svelte = { "prettierd" },
+			-- go = "gofumpt",
 		},
 		format_on_save = {
 			timeout_ms = 150,
 		},
 	})
-
-	require("hop").setup({})
-
-	require("snippets").setup({
-		create_autocommand = true,
-		create_cmp_source = false,
-		friendly_snippets = false,
-		search_paths = {
-			vim.fn.stdpath("config") .. "/snippets",
-		},
-	})
-
 	require("blink-cmp").setup({
 		completion = {
 			accept = { auto_brackets = { enabled = true } },
 			list = { selection = { preselect = false, auto_insert = true } },
-
 			documentation = {
 				auto_show = true,
 				auto_show_delay_ms = 250,
 				treesitter_highlighting = true,
 			},
 		},
-
 		keymap = {
 			["<C-CR>"] = { "accept", "fallback" },
 			["<C-p>"] = { "select_prev", "fallback" },
@@ -135,7 +136,6 @@ later(function()
 
 		signature = { enabled = true },
 		cmdline = { enabled = false },
-
 		sources = {
 			default = { "lsp", "path", "buffer" },
 			providers = {
@@ -155,15 +155,17 @@ later(function()
 			},
 		},
 	})
-
-	require("tiny-inline-diagnostic").setup()
 	require("oil").setup({
 		default_file_explorer = true,
 		view_options = {
 			show_hidden = true,
 		},
 	})
+	require("luasnip").config.setup({})
+	require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
 
+	require("hop").setup()
+	require("tiny-inline-diagnostic").setup()
 	require("mini.surround").setup()
 	require("mini.icons").setup()
 	require("mini.notify").setup()
@@ -214,33 +216,22 @@ map({ "n", "v" }, "{", "20gk", { silent = true })
 map({ "n", "v" }, "}", "20gj", { silent = true })
 map("t", "<esc>", "<C-\\><C-n>")
 
+map("i", "<Tab>", function()
+	local ls = require("luasnip")
+	if ls.expandable() then
+		vim.schedule(function()
+			ls.expand()
+		end)
+		return ""
+	else
+		return "\t"
+	end
+end, { silent = true, expr = true })
 map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>")
 map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>")
-
-_G.cr_action = function()
-	if vim.fn.complete_info()["selected"] ~= -1 then
-		return "\25"
-	end
-	return "\r"
-end
-
-vim.keymap.set("i", "<CR>", "v:lua.cr_action()", { expr = true })
-
-map({ "n" }, "<leader>e", "<cmd>lua require('telescope.builtin').find_files()<cr>")
-map({ "n" }, "<leader>f", "<cmd>lua require('telescope.builtin').live_grep()<cr>")
-map({ "n" }, "<leader>b", "<cmd>lua require('telescope.builtin').buffers()<cr>")
-map({ "n" }, "<leader>r", "<cmd>lua require('telescope.builtin').resume()<cr>")
-map({ "n" }, "S", "<cmd>HopWord<cr>")
-map({ "i" }, "<Tab>", function()
-	vim.cmd('echo "hello from tab handler"')
-	if vim.snippet.active() then
-		vim.cmd('echo "we went it"')
-		vim.schedule(function()
-			vim.snippet.jump(1)
-		end)
-		return
-	end
-	vim.cmd('echo "no we didnt"')
-	return "<Tab>"
-end, { silent = true, expr = true })
-map({ "n" }, "-", "<cmd>Oil<cr>", { silent = true })
+map("n", "<leader>e", "<cmd>lua require('telescope.builtin').find_files()<cr>")
+map("n", "<leader>f", "<cmd>lua require('telescope.builtin').live_grep()<cr>")
+map("n", "<leader>b", "<cmd>lua require('telescope.builtin').buffers()<cr>")
+map("n", "<leader>r", "<cmd>lua require('telescope.builtin').resume()<cr>")
+map("n", "S", "<cmd>HopWord<cr>", { silent = true })
+map("n", "-", "<cmd>Oil<cr>", { silent = true })
