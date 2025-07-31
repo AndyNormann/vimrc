@@ -1,96 +1,53 @@
-vim.loader.enable()
 local vim = vim
+vim.loader.enable()
 local opt = vim.opt
 local map = vim.keymap.set
-local g = vim.g
-local o = vim.o
+local pack = vim.pack
 
-local path_package = vim.fn.stdpath("data") .. "/site/"
-local mini_path = path_package .. "pack/deps/start/mini.nvim"
-if not vim.loop.fs_stat(mini_path) then
-	vim.cmd('echo "Installing `mini.nvim`" | redraw')
-	local clone_cmd = {
-		"git",
-		"clone",
-		"--filter=blob:none",
-		"https://github.com/echasnovski/mini.nvim",
-		mini_path,
-	}
-	vim.fn.system(clone_cmd)
-	vim.cmd("packadd mini.nvim | helptags ALL")
-	vim.cmd('echo "Installed `mini.nvim`" | redraw')
-end
-
-local deps = require("mini.deps")
-deps.setup({ path = { package = path_package } })
-
-local add = deps.add
-local now = deps.now
-local later = deps.later
-
-add({
-	source = "neovim/nvim-lspconfig",
-	depends = { "mason-org/mason.nvim", "mason-org/mason-lspconfig.nvim", "stevearc/conform.nvim" },
+pack.add({
+	{ src = "https://github.com/neovim/nvim-lspconfig" },
+	{ src = "https://github.com/mason-org/mason.nvim" },
+	{ src = "https://github.com/mason-org/mason-lspconfig.nvim" },
+	{ src = "https://github.com/stevearc/conform.nvim" },
+	{ src = "https://github.com/catppuccin/nvim" },
+	{ src = "https://github.com/mattn/emmet-vim" },
+	{ src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
+	{ src = "https://github.com/nvim-telescope/telescope.nvim" },
+	{ src = "https://github.com/nvim-lua/plenary.nvim" },
+	{ src = "https://github.com/nvim-telescope/telescope-fzy-native.nvim" },
+	{ src = "https://github.com/davidosomething/format-ts-errors.nvim" },
+	{ src = "https://github.com/stevearc/oil.nvim" },
+	{ src = "https://github.com/saghen/blink.cmp", version = "v1.3.1" },
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "master" },
+	{ src = "https://github.com/echasnovski/mini.basics" },
+	{ src = "https://github.com/echasnovski/mini.surround" },
+	{ src = "https://github.com/echasnovski/mini.pairs" },
 })
-add({ source = "catppuccin/nvim" })
-add({ source = "rachartier/tiny-inline-diagnostic.nvim" })
-add({
-	source = "nvim-telescope/telescope.nvim",
-	depends = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-fzy-native.nvim" },
-})
-add({ source = "davidosomething/format-ts-errors.nvim" })
-add({ source = "stevearc/oil.nvim" })
-add({ source = "smoka7/hop.nvim" })
-add({ source = "garymjr/nvim-snippets" })
-add({
-	source = "saghen/blink.cmp",
-	checkout = "v1.3.1",
-})
-add({
-	source = "nvim-treesitter/nvim-treesitter",
-	checkout = "master",
-	monitor = "main",
-	hooks = {
-		post_checkout = function()
-			vim.cmd("TSUpdate")
-		end,
+
+vim.cmd.colorscheme("catppuccin-mocha")
+
+-- Options
+require("mini.basics").setup()
+opt.laststatus = 0
+opt.expandtab = true
+opt.shiftwidth = 2
+opt.tabstop = 2
+opt.clipboard = "unnamedplus"
+opt.swapfile = false
+opt.shell = "fish"
+opt.winborder = "bold"
+
+require("nvim-treesitter.configs").setup({
+	ensure_installed = { "lua", "vimdoc", "tsx", "c", "typescript" },
+	highlight = {
+		enable = true,
+		use_languagetree = true,
+		additional_vim_regex_highlighting = true,
 	},
+	indent = { enable = true },
 })
-add({
-	source = "L3MON4D3/LuaSnip",
-	checkout = "v2.4.0",
-	hooks = {
-		post_checkout = function(args)
-			vim.system({ "make", "-C", args.path, "install_jsregexp" })
-		end,
-		post_install = function(args)
-			vim.system({ "make", "-C", args.path, "install_jsregexp" })
-		end,
-	},
-})
-add({ source = "rafamadriz/friendly-snippets" })
 
-now(function()
-	vim.cmd.colorscheme("catppuccin-mocha")
-	require("mini.basics").setup()
-	-- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-	-- vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
-	-- vim.api.nvim_set_hl(0, "SignColumn", { bg = "none" })
-	vim.api.nvim_set_hl(0, "Visual", { reverse = true })
-
-	require("mason").setup()
-	require("mason-lspconfig").setup()
-
-	require("nvim-treesitter.configs").setup({
-		ensure_installed = { "lua", "vimdoc", "tsx", "c", "typescript" },
-		highlight = {
-			enable = true,
-			use_languagetree = true,
-			additional_vim_regex_highlighting = true,
-		},
-		indent = { enable = true },
-	})
-
+vim.schedule(function()
 	local telescope = require("telescope")
 	telescope.setup({
 		defaults = {
@@ -98,9 +55,10 @@ now(function()
 		},
 	})
 	telescope.load_extension("fzy_native")
-end)
 
-later(function()
+	require("mason").setup()
+	require("mason-lspconfig").setup()
+
 	require("conform").setup({
 		formatters_by_ft = {
 			lua = { "stylua" },
@@ -110,7 +68,7 @@ later(function()
 			typescriptreact = { "prettierd" },
 			javascript = { "prettierd" },
 			svelte = { "prettierd" },
-			-- go = "gofumpt",
+			go = { "gofumpt" },
 		},
 		format_on_save = {
 			timeout_ms = 150,
@@ -161,31 +119,11 @@ later(function()
 			show_hidden = true,
 		},
 	})
-	require("luasnip").config.setup({})
-	require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
 
-	require("hop").setup()
 	require("tiny-inline-diagnostic").setup()
 	require("mini.surround").setup()
-	require("mini.icons").setup()
-	require("mini.notify").setup()
 	require("mini.pairs").setup()
 end)
-
-g.mapleader = " "
-g.maplocalleader = " "
-
--- Options
-opt.laststatus = 0
-opt.expandtab = true
-opt.smarttab = true
-opt.shiftwidth = 2
-opt.tabstop = 2
-opt.wrap = true
-opt.clipboard = "unnamedplus"
-opt.cursorline = false
-opt.completeopt = "noselect,menuone,longest,popup,fuzzy"
-o.winborder = "bold"
 
 -- Restore cursor to file position in previous editing session
 vim.api.nvim_create_autocmd("BufReadPost", {
@@ -216,22 +154,10 @@ map({ "n", "v" }, "{", "20gk", { silent = true })
 map({ "n", "v" }, "}", "20gj", { silent = true })
 map("t", "<esc>", "<C-\\><C-n>")
 
-map("i", "<Tab>", function()
-	local ls = require("luasnip")
-	if ls.expandable() then
-		vim.schedule(function()
-			ls.expand()
-		end)
-		return ""
-	else
-		return "\t"
-	end
-end, { silent = true, expr = true })
 map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>")
 map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>")
 map("n", "<leader>e", "<cmd>lua require('telescope.builtin').find_files()<cr>")
 map("n", "<leader>f", "<cmd>lua require('telescope.builtin').live_grep()<cr>")
 map("n", "<leader>b", "<cmd>lua require('telescope.builtin').buffers()<cr>")
 map("n", "<leader>r", "<cmd>lua require('telescope.builtin').resume()<cr>")
-map("n", "S", "<cmd>HopWord<cr>", { silent = true })
 map("n", "-", "<cmd>Oil<cr>", { silent = true })
