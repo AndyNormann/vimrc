@@ -1,34 +1,10 @@
 vim.loader.enable()
-local vim = vim
 local opt = vim.opt
 local map = vim.keymap.set
 local pack = vim.pack
 
 vim.g.mapleader = " "
 vim.g.localleader = " "
-
-map("n", "<Leader><cr>", ":noh<cr>", { silent = true })
-map({ "n", "v" }, "0", "^")
-
-map("n", ";", ":")
-map("n", ":", ";")
-
-map({ "n", "v" }, "{", "20gk", { silent = true })
-map({ "n", "v" }, "}", "20gj", { silent = true })
-map("t", "<esc>", "<C-\\><C-n>")
-
--- Options
-opt.laststatus = 0
-opt.expandtab = true
-opt.shiftwidth = 2
-opt.tabstop = 2
-opt.signcolumn = "yes"
-opt.clipboard = "unnamedplus"
-opt.completeopt = "fuzzy,noselect,menuone,popup"
-opt.swapfile = false
-opt.shell = "fish"
-opt.winborder = "bold"
-opt.complete = ".,o"
 
 pack.add({
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
@@ -42,7 +18,6 @@ pack.add({
 	{ src = "https://github.com/davidosomething/format-ts-errors.nvim" },
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/ray-x/lsp_signature.nvim" },
-	{ src = "https://github.com/dmtrKovalenko/fff.nvim" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "master" },
 	{ src = "https://github.com/echasnovski/mini.surround" },
 	{ src = "https://github.com/echasnovski/mini.pairs" },
@@ -54,7 +29,22 @@ require("nvim-treesitter.configs").setup({
 })
 
 vim.schedule(function()
-	require("fzf-lua").setup({})
+	require("fzf-lua").setup({
+		winopts = {
+			width = 0.90,
+			border = "solid",
+			preview = {
+				border = "solid",
+			},
+		},
+		fzf_opts = {
+			["--no-scrollbar"] = true,
+			["--layout"] = "default",
+		},
+		fzf_colors = {
+			["bg+"] = "-1",
+		},
+	})
 
 	require("mason").setup()
 	require("mason-lspconfig").setup()
@@ -74,7 +64,12 @@ vim.schedule(function()
 			timeout_ms = 150,
 		},
 	})
-	require("lsp_signature").setup()
+	require("lsp_signature").setup({
+		hint_enable = false,
+		handler_opts = {
+			border = "single",
+		},
+	})
 	require("oil").setup({
 		default_file_explorer = true,
 		view_options = {
@@ -99,16 +94,44 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 })
 
 vim.api.nvim_create_autocmd("LspAttach", {
-	callback = function(args, bufnr)
+	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		if client == nil then
+			return
+		end
 		client.server_capabilities.semanticTokensProvider = nil
-		vim.lsp.completion.enable(true, client.id, bufnr, {
+		vim.lsp.completion.enable(true, client.id, 0, {
 			autotrigger = true,
 		})
 	end,
 })
 
+-- Options
+opt.laststatus = 0
+opt.expandtab = true
+opt.shiftwidth = 2
+opt.tabstop = 2
+opt.signcolumn = "yes"
+opt.clipboard = "unnamedplus"
+opt.completeopt = "fuzzy,noselect,menuone,popup"
+opt.swapfile = false
+opt.shell = "fish"
+opt.winborder = "solid"
+opt.complete = ".,o"
+
 -- Keymaps
+map("n", "<Leader><cr>", ":noh<cr>", { silent = true })
+map({ "n", "v" }, "0", "^")
+
+map({ "n", "v" }, "j", "gj")
+map({ "n", "v" }, "k", "gk")
+
+map("n", ";", ":")
+map("n", ":", ";")
+
+map({ "n", "v" }, "{", "20gk", { silent = true })
+map({ "n", "v" }, "}", "20gj", { silent = true })
+map("t", "<esc>", "<C-\\><C-n>")
 map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>")
 map("n", "<leader>e", "<cmd>FzfLua files<cr>")
 map("n", "<leader>f", "<cmd>FzfLua live_grep<cr>")
