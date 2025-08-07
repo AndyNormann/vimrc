@@ -22,6 +22,10 @@
                 "path": "./javascript/typescript.json"
             },
             {
+                "language": ["javascript", "javascriptreact"],
+                "path": "./javascript/javascript.json"
+            },
+            {
                 "language": "javascriptreact",
                 "path": "./javascript/next.json"
             },

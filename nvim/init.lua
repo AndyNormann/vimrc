@@ -11,7 +11,7 @@ pack.add({
 	{ src = "https://github.com/mason-org/mason.nvim" },
 	{ src = "https://github.com/mason-org/mason-lspconfig.nvim" },
 	{ src = "https://github.com/stevearc/conform.nvim" },
-	{ src = "https://github.com/catppuccin/nvim" },
+	{ src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
 	{ src = "https://github.com/mattn/emmet-vim" },
 	{ src = "https://github.com/rachartier/tiny-inline-diagnostic.nvim" },
 	{ src = "https://github.com/ibhagwan/fzf-lua" },
@@ -21,9 +21,14 @@ pack.add({
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "master" },
 	{ src = "https://github.com/echasnovski/mini.surround" },
 	{ src = "https://github.com/echasnovski/mini.pairs" },
+	{ src = "https://github.com/L3MON4D3/LuaSnip" },
 })
 
-vim.cmd.colorscheme("catppuccin-mocha")
+require("catppuccin").setup({
+	flavour = "mocha",
+	transparent_background = true,
+})
+vim.cmd.colorscheme("catppuccin")
 require("nvim-treesitter.configs").setup({
 	highlight = { enable = true },
 })
@@ -76,6 +81,21 @@ vim.schedule(function()
 			show_hidden = true,
 		},
 	})
+	local ls = require("luasnip")
+	ls.config.setup({})
+	require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
+
+	map("i", "<Tab>", function()
+		if ls.expandable() then
+			vim.schedule(function()
+				vim.snippet.jump(1)
+				ls.expand()
+			end)
+			return ""
+		else
+			return "\t"
+		end
+	end, { silent = true, expr = true })
 
 	require("tiny-inline-diagnostic").setup()
 	require("mini.surround").setup()
@@ -128,6 +148,8 @@ map({ "n", "v" }, "k", "gk")
 
 map("n", ";", ":")
 map("n", ":", ";")
+
+map("i", "<c-cr>", "<c-y>")
 
 map({ "n", "v" }, "{", "20gk", { silent = true })
 map({ "n", "v" }, "}", "20gj", { silent = true })

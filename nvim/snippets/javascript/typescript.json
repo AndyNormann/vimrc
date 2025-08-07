@@ -1,6 +1,10 @@
 {
   "console.log": {
     "prefix": "cl",
-    "body": "console.log(\"$1\")"
+    "body": "console.log($1)"
+  },
+  "logger.log": {
+    "prefix": "log",
+    "body": "logger.log(`\\${DEBUG_PREFIX\\} $1`)"
   }
 }
