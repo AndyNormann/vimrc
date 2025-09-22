@@ -1,0 +1,54 @@
+{
+  "console.log": {
+    "prefix": "cl",
+    "body": "console.log($1)"
+  },
+  "logger.log": {
+    "prefix": "log",
+    "body": "logger.log(`\\${DEBUG_PREFIX\\} $1`)"
+  },
+  "div": {
+    "prefix": "div",
+    "body": "<div>$1</div>"
+  },
+  "button": {
+    "prefix": "button",
+    "body": "<button>$1</button>"
+  },
+  "ul": {
+    "prefix": "ul",
+    "body": "<ul>$1</ul>"
+  },
+  "li": {
+    "prefix": "li",
+    "body": "<li>$1</li>"
+  },
+  "span": {
+    "prefix": "span",
+    "body": "<span>$1</span>"
+  },
+  "p": {
+    "prefix": "p",
+    "body": "<p>$1</p>"
+  },
+  "h1": {
+    "prefix": "h1",
+    "body": "<h1>$1</h1>"
+  },
+  "h2": {
+    "prefix": "h2",
+    "body": "<h2>$1</h2>"
+  },
+  "h3": {
+    "prefix": "h3",
+    "body": "<h3>$1</h3>"
+  },
+  "h4": {
+    "prefix": "h4",
+    "body": "<h4>$1</h4>"
+  },
+  "translation": {
+    "prefix": "t",
+    "body": "t(\"$1\")"
+  }
+}
