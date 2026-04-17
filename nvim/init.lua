@@ -7,108 +7,127 @@ local pack = vim.pack
 g.mapleader = " "
 g.localleader = " "
 
+---@param x string
+---@return string
+local gh = function(x)
+	return "https://github.com/" .. x
+end
+
 pack.add({
-	{ src = "https://github.com/cpea2506/one_monokai.nvim" },
-	{ src = "https://github.com/folke/snacks.nvim" },
-	{ src = "https://github.com/esmuellert/codediff.nvim" },
-	{ src = "https://github.com/MunifTanjim/nui.nvim" },
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
-	{ src = "https://github.com/echasnovski/mini.nvim" },
-	{ src = "https://github.com/neovim/nvim-lspconfig" },
-	{ src = "https://github.com/mason-org/mason.nvim" },
-	{ src = "https://github.com/mason-org/mason-lspconfig.nvim" },
-	{ src = "https://github.com/stevearc/oil.nvim" },
-	{ src = "https://github.com/stevearc/conform.nvim" },
-	{ src = "https://github.com/L3MON4D3/LuaSnip" },
-	{ src = "https://github.com/stevearc/overseer.nvim" },
-	{ src = "https://github.com/Saghen/blink.cmp", version = "v1.7.0" },
-	{ src = "https://github.com/hedyhli/outline.nvim" },
-	{ src = "https://github.com/folke/sidekick.nvim" },
-	{ src = "https://github.com/folke/lazydev.nvim" },
-	{ src = "https://github.com/j-hui/fidget.nvim" },
-	{ src = "https://github.com/mattn/emmet-vim" },
+	{ src = gh("catppuccin/nvim"), name = "catppuccin" },
+	{ src = gh("nvim-mini/mini.nvim") },
+	{ src = gh("saghen/blink.pairs"), version = "v0.4.1" },
+	{ src = gh("SmiteshP/nvim-navic") },
+	{ src = gh("nvim-treesitter/nvim-treesitter"), version = "main" },
+	{ src = gh("neovim/nvim-lspconfig") },
+	{ src = gh("mason-org/mason.nvim") },
+	{ src = gh("mason-org/mason-lspconfig.nvim") },
+	{ src = gh("stevearc/oil.nvim") },
+	{ src = gh("stevearc/conform.nvim") },
 }, {
 	confirm = false,
 })
 
-require("mini.deps").now(function()
-	vim.api.nvim_create_autocmd("FileType", {
-		pattern = {
-			"cpp",
-			"lua",
-			"c",
-			"make",
-			"ts",
-			"tsx",
-			"typescript",
-			"typescriptreact",
-			"zig",
-			"go",
-			"odin",
-			"rust",
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = {
+		"cpp",
+		"lua",
+		"c",
+		"make",
+		"ts",
+		"tsx",
+		"typescript",
+		"typescriptreact",
+		"zig",
+		"go",
+		"odin",
+		"rust",
+		"svelte",
+	},
+	callback = function()
+		vim.treesitter.start()
+	end,
+})
+
+require("catppuccin").setup({
+	flavour = "mocha",
+	transparent_background = true,
+	term_colors = true,
+})
+vim.cmd.colorscheme("catppuccin")
+
+vim.cmd("highlight Visual gui=reverse cterm=reverse")
+
+-- Options
+o.undofile = true
+o.splitkeep = "screen"
+o.splitright = true
+o.backup = false
+o.writebackup = false
+o.signcolumn = "yes"
+o.fillchars = "eob: "
+o.ignorecase = true
+o.incsearch = true
+o.infercase = true
+o.smartcase = true
+o.smartindent = true
+o.mouse = "a"
+o.showmode = false
+o.ruler = false
+o.laststatus = 0
+o.cmdheight = 1
+o.expandtab = true
+o.tabstop = 2
+o.shiftwidth = 2
+o.autochdir = false
+o.wrap = true
+o.shell = "fish"
+o.number = false
+o.pumheight = 8
+o.cursorline = false
+o.updatetime = 20
+o.timeoutlen = 300
+o.scrolloff = 10
+o.clipboard = "unnamedplus"
+o.winborder = "bold"
+o.pumborder = "bold"
+o.shortmess = "IWATFcnxC"
+o.completeopt = "menu,menuone,noselect"
+o.complete = ".,b,o"
+o.autocomplete = true
+o.foldlevel = 99
+o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+o.foldmethod = "expr"
+o.indentexpr = "v:lua.vim.treesitter.indentexpr()"
+
+g.neovide_hide_mouse_when_typing = true
+g.neovide_cursor_animation_length = 0
+g.neovide_scroll_animation_length = 0.05
+g.neovide_show_border = false
+g.neovide_window_blurred = false
+vim.g.neovide_floating_shadow = false
+
+require("mini.misc").setup_restore_cursor()
+
+map("n", "<leader>e", "<cmd>lua MiniPick.builtin.files()<cr>")
+map("n", "<leader>f", "<cmd>lua MiniPick.builtin.grep_live()<cr>")
+map("n", "<leader>b", "<cmd>lua MiniPick.builtin.buffers()<cr>")
+map("n", "<leader>r", "<cmd>lua MiniPick.builtin.resume()<cr>")
+map("n", "<leader>h", "<cmd>lua MiniPick.builtin.help()<cr>")
+
+require("mini.pick").setup({
+	window = {
+		config = {
+			width = math.floor(0.718 * vim.o.columns),
 		},
-		callback = function()
-			vim.treesitter.start()
-		end,
-	})
+	},
+	mappings = {
+		choose_marked = "<C-cr>",
+	},
+})
 
-	require("one_monokai").setup({
-		transparent = true,
-		colors = {
-			fg = "#dcdfe4",
-			white = "#dcdfe4",
-		},
-	})
-
-	vim.cmd("highlight Visual gui=reverse cterm=reverse")
-
-	require("snacks").setup({
-		bigfile = { enabled = true },
-		explorer = { enabled = true },
-		input = { enabled = true },
-		picker = { enabled = true },
-		notifier = { enabled = true },
-		quickfile = { enabled = true },
-	})
-
-	require("mini.pick").setup({
-		mappings = {
-			choose_marked = "<C-CR>",
-		},
-	})
-
-	require("mini.misc").setup_restore_cursor()
-
-	-- Options
-	require("mini.basics").setup({})
-	o.laststatus = 0
-	o.cmdheight = 1
-	o.tabstop = 2
-	o.shiftwidth = 2
-	o.autochdir = false
-	o.wrap = true
-	o.number = false
-	o.pumheight = 8
-	o.cursorline = false
-	o.updatetime = 20
-	o.timeoutlen = 200
-	o.scrolloff = 999
-	o.clipboard = "unnamedplus"
-	o.winborder = "rounded"
-	o.pumborder = "rounded"
-	o.shortmess = "IWATFsScnxC"
-
-	g.loaded_2html_plugin = 1
-	g.loaded_gzip = 1
-	g.loaded_man = 1
-	g.loaded_tarPlugin = 1
-	g.loaded_zipPlugin = 1
-	g.loaded_remote_plugins = 1
-	g.loaded_editorconfig = 1
-	g.loaded_netrw = 1
-	g.loaded_netrwPlugin = 1
-	g.loaded_tutor = 1
-
+vim.schedule(function()
+	map("n", "-", "<cmd>Oil<cr>", { silent = true })
 	map("n", "<Leader><cr>", ":noh<cr>", { silent = true })
 	map({ "n", "v" }, "0", "^")
 
@@ -121,7 +140,9 @@ require("mini.deps").now(function()
 	map({ "n", "v" }, "{", "<C-u>", { silent = true })
 	map({ "n", "v" }, "}", "<C-d>", { silent = true })
 	map("t", "<esc>", "<C-\\><C-n>", { silent = true })
-	map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", { silent = true })
+
+	map("i", "<C-k>", vim.lsp.buf.signature_help, { desc = "LSP Signature Help" })
+	map("n", "gd", "<cmd>lua vim.lsp.buf.implementation()<cr>", { silent = true })
 	vim.keymap.set(
 		"n",
 		"gf",
@@ -129,63 +150,49 @@ require("mini.deps").now(function()
 		{ silent = true, noremap = true }
 	)
 	map("i", "<C-l>", "<cmd>lua vim.lsp.inline_completion.get()<cr>", { noremap = true, silent = true })
+	map("i", "<C-CR>", "<C-y>", { noremap = true, silent = true })
 
-	map("n", "-", "<cmd>Oil<cr>", { silent = true })
+	vim.api.nvim_create_user_command("Breadcrumbs", function()
+		local navic = require("nvim-navic")
+		print(navic.get_location())
+	end, {})
+	vim.api.nvim_create_autocmd("LspProgress", {
+		callback = function(ev)
+			local value = ev.data.params.value or {}
+			local msg = value.message or "done"
 
-	map("n", "<leader>e", "<cmd>lua Snacks.picker.files()<cr>")
-	map("n", "<leader>f", "<cmd>lua Snacks.picker.grep()<cr>")
-	map("n", "<leader>b", "<cmd>lua Snacks.picker.buffers()<cr>")
-	map("n", "<leader>r", "<cmd>lua Snacks.picker.resume()<cr>")
-	map("n", "<leader>h", "<cmd>lua Snacks.picker.help()<cr>")
-end)
+			-- rust analyszer in particular has really long LSP messages so truncate them
+			if #msg > 40 then
+				msg = msg:sub(1, 37) .. "..."
+			end
 
-require("mini.deps").later(function()
-	require("fidget").setup({
-		progress = {
-			display = {
-				render_limit = 4,
-				done_ttl = 1,
-				progress_icon = { pattern = "bouncing_bar", period = 4 },
-			},
-		},
+			-- :h LspProgress
+			vim.api.nvim_echo({ { msg } }, false, {
+				id = "lsp",
+				kind = "progress",
+				title = value.title,
+				source = value.kind,
+				status = value.kind ~= "end" and "running" or "success",
+				percent = value.percentage,
+			})
+		end,
 	})
 
-	vim.g.copilot_nes_debounce = 500
-	vim.g.sidekick_nes = true
 	vim.lsp.enable("copilot")
-
-	require("vim._extui").enable({
-		enable = true,
-		msg = {
-			target = "msg",
-			timeout = 4000,
-		},
-	})
-
-	o.statusline = "%f %m"
-
-	require("sidekick").setup({
-		cli = {
-			win = {
-				layout = "float",
-			},
-		},
-	})
-
-	map("n", "grp", require("sidekick").nes_jump_or_apply, { silent = true })
-	map("n", "<leader>c", function()
-		require("sidekick.cli").toggle("claude")
-	end, { silent = true })
+	require("mini.extra").setup()
+	require("mini.surround").setup({})
 
 	require("mason").setup()
 	require("mason-lspconfig").setup()
-
-	require("outline").setup({})
+	require("oil").setup({
+		default_file_explorer = true,
+		show_hidden = true,
+	})
 
 	require("conform").setup({
 		format_on_save = {
 			timeout_ms = 500,
-			lsp_format = "never",
+			lsp_format = "fallback",
 		},
 		formatters_by_ft = {
 			typescript = { "prettierd", "prettier", stop_after_first = true },
@@ -193,37 +200,24 @@ require("mini.deps").later(function()
 			sass = { "prettierd", "prettier", stop_after_first = true },
 			css = { "prettierd", "prettier", stop_after_first = true },
 			scss = { "prettierd", "prettier", stop_after_first = true },
-			go = { "gofumpt" },
 			lua = { "stylua" },
-			rust = { "rustfmt" },
+			go = { "gofmt" },
 		},
 	})
 
-	require("overseer").setup({
-		templates = { "builtin" },
+	require("blink.pairs").setup({})
+
+	local snip = require("mini.snippets")
+	local gen_loader = snip.gen_loader
+	snip.setup({
+		snippets = { gen_loader.from_lang() },
 	})
 
-	vim.api.nvim_create_user_command("OverseerRunLast", function()
-		local overseer = require("overseer")
-		local tasks = overseer.list_tasks({ recent_first = true })
-		if vim.tbl_isempty(tasks) then
-			vim.notify("No tasks found", vim.log.levels.WARN)
-		else
-			overseer.run_action(tasks[1], "restart")
-		end
-	end, {})
-	map("n", "<leader>m", "<cmd>OverseerRunLast<cr>", { silent = true })
-	map("n", "<leader>n", "<cmd>OverseerRun<cr>", { silent = true })
-	map("n", "<leader>t", "<cmd>OverseerToggle<cr>", { silent = true })
-
-	local ls = require("luasnip")
-	ls.config.setup({})
-	require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
-
 	map("i", "<Tab>", function()
-		if ls.expand_or_jumpable() then
+		if snip.expand({ insert = false }) ~= nil then
 			vim.schedule(function()
-				ls.expand_or_jump()
+				snip.expand()
+				snip.session.stop()
 			end)
 			return ""
 		else
@@ -237,27 +231,75 @@ require("mini.deps").later(function()
 			show_hidden = true,
 		},
 	})
-	require("mini.surround").setup()
-	require("mini.pairs").setup()
-	require("mini.extra").setup()
-	require("mini.cmdline").setup()
+	vim.api.nvim_create_user_command("ShowNesting", function()
+		local current_node = vim.treesitter.get_node({})
+		local path = {}
 
-	require("lazydev").setup()
-	require("blink.cmp").setup({
-		completion = {
-			documentation = { auto_show = true },
-			list = { selection = { preselect = false, auto_insert = true } },
-		},
-		sources = {
-			default = { "lazydev", "lsp", "path", "buffer" },
-			providers = {
-				lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
+		while current_node do
+			print(current_node:type())
+			-- We look for nodes that typically represent keys or identifiers
+			if current_node:type() == "pair" or current_node:type() == "field" then
+				-- This logic varies slightly by language, but usually the first child is the key
+				local key_node = current_node:child(0)
+				if key_node then
+					table.insert(path, 1, vim.treesitter.get_node_text(key_node, 0))
+				end
+			end
+			current_node = current_node:parent()
+		end
+
+		if #path > 0 then
+			print("Nesting: " .. table.concat(path, " > "))
+		else
+			print("No nesting found (or not in a recognized object)")
+		end
+	end, {})
+
+	require("vim._core.ui2").enable({
+		enable = true,
+		msg = {
+			targets = {
+				[""] = "msg",
+				empty = "cmd",
+				bufwrite = "msg",
+				confirm = "cmd",
+				emsg = "pager",
+				echo = "msg",
+				echomsg = "msg",
+				echoerr = "pager",
+				completion = "cmd",
+				list_cmd = "pager",
+				lua_error = "pager",
+				lua_print = "msg",
+				progress = "pager",
+				rpc_error = "pager",
+				quickfix = "msg",
+				search_cmd = "cmd",
+				search_count = "cmd",
+				shell_cmd = "pager",
+				shell_err = "pager",
+				shell_out = "pager",
+				shell_ret = "msg",
+				undo = "msg",
+				verbose = "pager",
+				wildlist = "cmd",
+				wmsg = "msg",
+				typed_cmd = "cmd",
+			},
+			cmd = {
+				height = 0.5,
+			},
+			dialog = {
+				height = 0.5,
+			},
+			msg = {
+				height = 0.3,
+				timeout = 5000,
+			},
+			pager = {
+				height = 0.5,
 			},
 		},
-		cmdline = { enabled = false },
-		signature = { enabled = true, window = { border = "bold" } },
-		fuzzy = { implementation = "prefer_rust_with_warning" },
-		keymap = { ["<C-CR>"] = { "select_and_accept", "fallback" } },
 	})
 
 	vim.lsp.document_color.enable()
@@ -265,10 +307,27 @@ require("mini.deps").later(function()
 	vim.lsp.semantic_tokens.enable(false)
 	vim.diagnostic.config({
 		underline = true,
+		update_in_insert = false,
 		virtual_text = {
 			current_line = true,
 			severity = vim.diagnostic.severity.WARN,
 			spacing = 2,
 		},
+	})
+
+	vim.api.nvim_create_autocmd("LspAttach", {
+		callback = function(args)
+			local client = vim.lsp.get_client_by_id(args.data.client_id)
+			if not client then
+				return
+			end
+
+			if client:supports_method("textDocument/completion") then
+				vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+			end
+			if client.server_capabilities.documentSymbolProvider then
+				require("nvim-navic").attach(client, args.buf)
+			end
+		end,
 	})
 end)

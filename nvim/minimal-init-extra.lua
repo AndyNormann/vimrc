@@ -1,37 +1,53 @@
 local vim = vim
 local o = vim.opt
 local g = vim.g
-local map = vim.keymap.set
-local pack = vim.pack
+-- local pack = vim.pack
 
 g.mapleader = " "
 g.localleader = " "
 
--- vim.cmd.colorscheme("retrobox")
---
--- vim.api.nvim_set_hl(0, 'Normal', {guibg=nil, ctermbg=nil})
--- vim.api.nvim_set_hl(0, 'NormalFloat', {guibg=nil, ctermbg=nil})
--- vim.api.nvim_set_hl(0, 'SignColumn', {guibg=nil, ctermbg=nil})
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	pattern = { "cpp", "lua", "c", "make", "ts", "tsx", "typescript", "typescriptreact", "zig", "go", "odin" },
+-- 	callback = function()
+-- 		vim.treesitter.start()
+-- 	end,
+-- })
 
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = { "cpp", "lua", "c", "make", "ts", "tsx", "typescript", "typescriptreact", "zig", "go", "odin" },
-	callback = function()
-		vim.treesitter.start()
-	end,
-})
+-- pack.add({
+-- { src = "https://github.com/echasnovski/mini.nvim" },
+-- { src = "https://github.com/catppuccin/nvim" },
+-- { src = "https://github.com/neovim/nvim-lspconfig" },
+-- })
 
-pack.add({
-	{ src = "https://github.com/echasnovski/mini.nvim" },
-	-- { src = "https://github.com/neovim/nvim-lspconfig" },
-})
+-- vim.cmd.colorscheme("catppuccin-mocha")
 
-vim.schedule(function()
-	-- require("mini.pick").setup()
-	-- require("mini.files").setup()
-	-- require("mini.pairs").setup()
-	require("mini.surround").setup()
-	-- vim.lsp.enable({ "lua_ls", "clangd" })
-end)
+-- vim.schedule(function()
+-- 	vim.lsp.enable({ "clangd", "lua-ls" })
+-- 	vim.lsp.semantic_tokens.enable(false)
+-- 	vim.diagnostic.config({
+-- 		underline = true,
+-- 		virtual_text = {
+-- 			current_line = true,
+-- 			severity = vim.diagnostic.severity.WARN,
+-- 			spacing = 2,
+-- 		},
+-- 	})
+-- end)
+local map = vim.keymap.set
+
+map("n", "<Leader><cr>", ":noh<cr>", { silent = true })
+map("n", ";", ":")
+map("n", ":", ";")
+map({ "n", "v" }, "j", "gj")
+map({ "n", "v" }, "k", "gk")
+map("n", "gd", vim.lsp.buf.definition, { silent = true, buffer = true })
+map({ "n", "v" }, "{", "<C-u>", { silent = true })
+map({ "n", "v" }, "}", "<C-d>", { silent = true })
+
+-- vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { silent = true, buffer = true })
+
+-- o.complete = "o,.,w,b,u"
+-- o.completeopt = "fuzzy,menuone,noselect,popup" -- add 'popup' for docs (sometimes)
 
 -- Options
 o.laststatus = 0
@@ -40,6 +56,7 @@ o.shiftwidth = 2
 o.expandtab = true
 o.undofile = true
 o.mouse = "a"
+o.wrap = true
 o.backup = false
 o.breakindent = true
 o.ruler = false
@@ -62,35 +79,5 @@ o.smartindent = true
 o.completeopt = "noselect,menuone"
 o.clipboard = "unnamedplus"
 o.showmode = false
-
-o.smoothscroll = true
 o.shortmess = "IWATFsScnxC"
-o.shortmess:append({ W = true, I = true, c = true, C = true })
 o.termguicolors = true
-o.pumheight = 15
-o.conceallevel = 0
-o.foldmethod = "expr"
-o.foldexpr = "nvim_treesitter#foldexpr()"
-o.foldlevel = 100
-g.markdown_folding = 1
-
-o.fillchars = "eob: "
-
-vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-
-map("n", "<Leader><cr>", ":noh<cr>", { silent = true })
-map({ "n", "v" }, "0", "^")
-
-map({ "n", "v" }, "j", "gj")
-map({ "n", "v" }, "k", "gk")
-
-map("n", ";", ":")
-map("n", ":", ";")
--- map("n", "<Tab>", "za")
-
-map({ "n", "v" }, "{", "15gk", { silent = true })
-map({ "n", "v" }, "}", "15gj", { silent = true })
-map("t", "<esc>", "<C-\\><C-n>", { silent = true })
-map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", { silent = true })
-map("i", "<C-CR>", "<C-y>", { silent = true })
--- map("n", "-", "<cmd>lua MiniFiles.open()<cr>")

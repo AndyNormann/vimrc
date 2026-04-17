@@ -1,11 +1,11 @@
 {
   "console.log": {
     "prefix": "cl",
-    "body": "console.log($1)"
+    "body": "console.log($1)$0"
   },
   "logger.log": {
     "prefix": "log",
-    "body": "logger.log(`\\${PREFIX\\} $1`)"
+    "body": "logger.log(`\\${PREFIX\\} $1`)$0"
   },
   "useState": {
     "prefix": "us",
