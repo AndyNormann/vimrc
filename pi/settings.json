@@ -1,0 +1,26 @@
+{
+  "lastChangelogVersion": "1.5.2",
+  "defaultProvider": "oc-sdk-go",
+  "defaultModel": "deepseek-v4.1-flash",
+  "packages": [
+    "npm:pi-web-access",
+    "npm:pi-notify-agent",
+    "npm:@rsrini/pi-headroom",
+    "npm:pi-blackhole",
+    "npm:pi-impeccable",
+    "npm:pi-subagents",
+    "npm:pi-ponytail",
+    "git:github.com/otahontas/pi-coding-agent-catppuccin",
+    "npm:pi-opencode-bridge",
+    "npm:pi-image-tools"
+  ],
+  "theme": "catppuccin-mocha",
+  "defaultThinkingLevel": "low",
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:pi-web-access\",\"scope\":\"user\"}": "0.48.0",
+    "{\"source\":\"npm:pi-blackhole\",\"scope\":\"user\"}": "0.5.18",
+    "{\"source\":\"npm:pi-impeccable\",\"scope\":\"user\"}": "0.1.0",
+    "{\"source\":\"npm:pi-subagents\",\"scope\":\"user\"}": "0.88.1",
+    "{\"source\":\"npm:pi-image-tools\",\"scope\":\"user\"}": "1.4.0"
+  }
+}

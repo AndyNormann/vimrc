@@ -1,0 +1,43 @@
+{
+  "providers": {
+    "llama-cpp": {
+      "baseUrl": "http://localhost:8080/v1",
+      "api": "openai-completions",
+      "apiKey": "none",
+      "models": [
+        {
+          "id": "Qwen3.5-9B-Q3_K_M.gguf"
+        }
+      ]
+    },
+    "lm-studio": {
+      "baseUrl": "http://localhost:1234/v1",
+      "api": "openai-completions",
+      "apiKey": "lm-studio",
+      "models": [
+        {
+          "id": "meta-llama-3-8b-instruct",
+          "name": "Meta LLaMA 3 8B Instruct",
+          "contextWindow": 32000
+        },
+        {
+          "id": "qwen/qwen3.5-9b",
+          "name": "Qwen 3.5 9B mlx",
+          "contextWindow": 262144
+        }
+      ]
+    },
+    "omlx": {
+      "baseUrl": "http://localhost:8000/v1",
+      "api": "omlx",
+      "apiKey": "wallabror",
+      "models": [
+        {
+          "id": "mlx-community/Ornith-1.0-9B-4bit",
+          "name": "Ornith 1.0 9B 4bit",
+          "contextWindow": 32000
+        }
+      ]
+    }
+  }
+}
